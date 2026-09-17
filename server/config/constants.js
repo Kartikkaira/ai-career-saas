@@ -1,0 +1,62 @@
+module.exports = {
+  USER_ROLES: {
+    FREE: 'free',
+    PREMIUM: 'premium',
+    ADMIN: 'admin',
+  },
+  PLANS: {
+    FREE: {
+      id: 'free',
+      name: 'Free Starter',
+      priceINR: 0,
+      priceUSD: 0,
+      maxResumes: 1,
+      maxAnalysesPerMonth: 2,
+      features: [
+        '1 ATS-Optimized Resume',
+        '2 AI ATS Resume Analyses/month',
+        'Universal ATS Minimalist Template',
+        'Standard PDF Export',
+      ],
+    },
+    PRO_MONTHLY: {
+      id: 'pro_monthly',
+      name: 'Pro Career (Monthly)',
+      priceINR: 99,
+      priceUSD: 2,
+      interval: 'monthly',
+      maxResumes: 9999,
+      maxAnalysesPerMonth: 9999,
+      features: [
+        'Unlimited ATS-Optimized Resumes',
+        'Unlimited AI ATS Analyses & Scoring',
+        'All Premium Templates (Tech & Executive)',
+        'Full AI Bullet Point Enhancer (X-Y-Z formula)',
+        'Job Description Keyword Matcher',
+        'Priority AI processing speed',
+        'High-Resolution PDF Exports',
+      ],
+    },
+    PRO_ANNUAL: {
+      id: 'pro_annual',
+      name: 'Pro Career (Annual - Save 41%)',
+      priceINR: 699,
+      priceUSD: 9,
+      interval: 'yearly',
+      maxResumes: 9999,
+      maxAnalysesPerMonth: 9999,
+      features: [
+        'Everything in Pro Monthly',
+        'Save 41% (Only ₹58/month)',
+        'Unlimited AI Rewrite & Grammar Fixes',
+        'Personal Career Progression Tracking',
+        'Priority Support',
+      ],
+    },
+  },
+  TEMPLATES: [
+    { id: 'standard-ats', name: 'Universal ATS Minimalist', isPremium: false },
+    { id: 'modern-tech', name: 'Tech & Engineering Specialist', isPremium: true },
+    { id: 'executive-elite', name: 'Executive Leadership ATS', isPremium: true },
+  ],
+};

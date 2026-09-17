@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: #e2e8f0;
+  }
+  body {
+    background-color: #F8F8FB;
+    color: #0F172A;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  ::selection {
+    background-color: #7B61FF;
+    color: #ffffff;
+  }
+}
+
+/* Custom Scrollbar - Clean Modern Light */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f3f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Light Surface Panels & Cards with Soft Multi-Tier Drop Shadows */
+.glass-panel {
+  background: #ffffff;
+  border: 1px solid #e9ebf2;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+}
+
+.glass-panel:hover {
+  border-color: #d7cffe;
+  box-shadow: 0 16px 36px -6px rgba(123, 97, 255, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+}
+
+.glass-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px -1px rgba(15, 23, 42, 0.04);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+.glass-card:hover {
+  border-color: #bba9fd;
+  box-shadow: 0 14px 28px -4px rgba(123, 97, 255, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  transform: translateY(-4px);
+}
+
+.glass-dropdown {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12);
+}
+
+/* Card Hover Lift Utility */
+.card-interactive {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -4px rgba(123, 97, 255, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+}
+
+/* Subtle Luminous Pastel Ambient Glows on #F8F8FB */
+.ambient-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(110px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+}
+
+.ambient-indigo {
+  background: radial-gradient(circle, rgba(123, 97, 255, 0.15) 0%, rgba(248, 248, 251, 0) 70%);
+}
+
+.ambient-cyan {
+  background: radial-gradient(circle, rgba(45, 156, 219, 0.14) 0%, rgba(248, 248, 251, 0) 70%);
+}
+
+.ambient-purple {
+  background: radial-gradient(circle, rgba(168, 139, 255, 0.14) 0%, rgba(248, 248, 251, 0) 70%);
+}
+
+/* Viewport Scroll Reveal Helpers */
+.reveal-fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-fade-up.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-scale-in {
+  opacity: 0;
+  transform: scale(0.95) translateY(12px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-scale-in.is-revealed {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.reveal-mask-in {
+  opacity: 0;
+  clip-path: inset(8% 0 8% 0 round 24px);
+  transform: translateY(20px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), clip-path 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, clip-path;
+}
+
+.reveal-mask-in.is-revealed {
+  opacity: 1;
+  clip-path: inset(0 0 0 0 round 24px);
+  transform: translateY(0);
+}
+
+/* Staggered transition delay utilities */
+.reveal-delay-1 { transition-delay: 100ms; }
+.reveal-delay-2 { transition-delay: 200ms; }
+.reveal-delay-3 { transition-delay: 300ms; }
+.reveal-delay-4 { transition-delay: 400ms; }
+
+/* Micro-Interactions: Input focus ring & transition */
+.input-interactive {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.input-interactive:focus {
+  border-color: #7B61FF;
+  box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.16);
+  outline: none;
+}
+
+/* Micro-Interactions: Link subtle underline accent */
+.nav-link-interactive {
+  position: relative;
+}
+.nav-link-interactive::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #7B61FF;
+  border-radius: 9999px;
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), left 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link-interactive:hover::after {
+  width: calc(100% - 24px);
+  left: 12px;
+}
+
+/* Accessibility: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-fade-up,
+  .reveal-scale-in,
+  .reveal-mask-in {
+    opacity: 1 !important;
+    clip-path: none !important;
+    transform: none !important;
+  }
+  .card-interactive:hover,
+  .glass-card:hover {
+    transform: none !important;
+  }
+}
+
+/* Print Rules for ATS Resume PDF Export */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #resume-printable-area, #resume-printable-area * {
+    visibility: visible !important;
+  }
+  #resume-printable-area {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+}
