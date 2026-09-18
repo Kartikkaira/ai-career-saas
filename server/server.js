@@ -17,14 +17,38 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Middleware
+// Configure CORS with sanitized origin handling
+const defaultOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+];
+
+const allowedOrigins = [...defaultOrigins];
+if (process.env.CLIENT_URL) {
+  process.env.CLIENT_URL.split(',').forEach((url) => {
+    const cleanUrl = url.trim().replace(/\/+$/, '');
+    if (cleanUrl && !allowedOrigins.includes(cleanUrl)) {
+      allowedOrigins.push(cleanUrl);
+    }
+  });
+}
+
 app.use(
   cors({
-    origin: [
-      process.env.CLIENT_URL || 'http://localhost:5173',
-      'http://localhost:3000',
-      'http://localhost:5174',
-    ],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. server-to-server, curl, Postman, health checks)
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/+$/, '');
+      const isAllowed =
+        allowedOrigins.includes(cleanOrigin) ||
+        (cleanOrigin.endsWith('.vercel.app') && allowedOrigins.some((o) => o.includes('.vercel.app')));
+
+      if (isAllowed) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS policy blocked access from origin: ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -33,8 +57,26 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
-app.use(express.json({ limit: '10mb' }));
+// Parse JSON with rawBody captured for Stripe webhook verification
+app.use(
+  express.json({
+    limit: '10mb',
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  })
+);
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Root route (for Render / uptime health check pings)
+app.all('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: '🚀 AI Career SaaS Backend API is operational',
+    healthCheck: '/api/health',
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // Health Check API
 app.get('/api/health', (req, res) => {
@@ -48,12 +90,21 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API Routes
+// API Routes (supports both /api/* and direct /* prefixes)
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
 app.use('/api/resumes', resumeRoutes);
+app.use('/resumes', resumeRoutes);
+
 app.use('/api/analysis', analysisRoutes);
+app.use('/analysis', analysisRoutes);
+
 app.use('/api/subscription', subscriptionRoutes);
+app.use('/subscription', subscriptionRoutes);
+
 app.use('/api/user', userRoutes);
+app.use('/user', userRoutes);
 
 // 404 Route Handler
 app.use('*', (req, res) => {

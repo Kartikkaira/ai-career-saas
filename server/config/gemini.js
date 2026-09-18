@@ -20,7 +20,7 @@ const getGeminiClient = () => {
   return aiClient;
 };
 
-const DEFAULT_GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.7-flash';
+const DEFAULT_GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
 
 module.exports = {
   getGeminiClient,

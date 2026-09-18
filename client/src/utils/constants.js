@@ -1,4 +1,6 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const rawApiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
+const sanitizedUrl = rawApiUrl.trim().replace(/\/+$/, '');
+export const API_BASE_URL = sanitizedUrl.endsWith('/api') ? sanitizedUrl : `${sanitizedUrl}/api`;
 
 export const RESUME_TEMPLATES = [
   {
