@@ -13,6 +13,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { BuilderPage } from './pages/BuilderPage';
 import { AnalyzerPage } from './pages/AnalyzerPage';
 import { PricingPage } from './pages/PricingPage';
+import { TemplatesPage } from './pages/TemplatesPage';
 import { AuthPage } from './pages/AuthPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
@@ -28,7 +29,7 @@ export function App() {
   }, [isAuthenticated]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8F8FB] text-slate-900 font-sans selection:bg-[#7B61FF] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#F7F4ED] text-[#15130F] font-sans selection:bg-[#15130F] selection:text-[#F7F4ED]">
       {/* Global Navbar */}
       <Navbar />
 
@@ -40,6 +41,7 @@ export function App() {
           <Route path="/builder" element={<BuilderPage />} />
           <Route path="/analyzer" element={<AnalyzerPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/templates" element={<TemplatesPage />} />
           <Route
             path="/dashboard"
             element={

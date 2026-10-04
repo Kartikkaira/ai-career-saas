@@ -24,7 +24,7 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl'
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#15130F]/50 backdrop-blur-sm transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -33,15 +33,15 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl'
       <div
         role="dialog"
         aria-modal="true"
-        className={`relative w-full ${maxWidth} bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200`}
+        className={`relative w-full ${maxWidth} bg-[#FAF8F3] border border-[#15130F]/15 rounded-3xl shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200 text-[#15130F]`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-          <h3 className="text-lg font-bold text-slate-900 tracking-tight">{title}</h3>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#15130F]/10 bg-[#FAF8F3]">
+          <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#15130F] tracking-tight">{title}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-full text-[#5C564E] hover:text-[#15130F] hover:bg-[#EFECE3] transition"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -49,7 +49,7 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl'
         </div>
 
         {/* Content */}
-        <div className="p-6 max-h-[80vh] overflow-y-auto text-slate-800">{children}</div>
+        <div className="p-6 max-h-[80vh] overflow-y-auto text-[#15130F]">{children}</div>
       </div>
     </div>
   );

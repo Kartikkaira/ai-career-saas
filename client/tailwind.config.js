@@ -7,6 +7,44 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Design System Palette Tokens
+        cream: {
+          DEFAULT: '#F7F4ED',
+          light: '#FAF8F3',
+          dark: '#EFECE3',
+          border: '#E8E3D7',
+        },
+        ink: {
+          DEFAULT: '#15130F',
+          soft: '#25211C',
+          muted: '#5C564E',
+          faint: '#8A8277',
+        },
+        olive: {
+          DEFAULT: '#3D4A2E',
+          light: '#4C5D3A',
+          dark: '#2E3822',
+        },
+        terracotta: {
+          DEFAULT: '#B8571E',
+          light: '#CD6325',
+          dark: '#924314',
+        },
+        sand: {
+          DEFAULT: '#D8C9A8',
+          light: '#E6DCBF',
+          dark: '#C2B18A',
+        },
+        navy: {
+          DEFAULT: '#2E3A4F',
+          light: '#3C4B65',
+          dark: '#1F2837',
+        },
+        espresso: {
+          DEFAULT: '#2A1F18',
+          light: '#3A2C22',
+          dark: '#1C140F',
+        },
         primary: {
           50: '#f3f0ff',
           100: '#eae5fe',
@@ -42,8 +80,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        serif: ['Merriweather', 'Georgia', 'serif'],
+        serif: ['Fraunces', 'Canela', 'Playfair Display', 'Georgia', 'serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['Fira Code', 'monospace'],
       },
       boxShadow: {

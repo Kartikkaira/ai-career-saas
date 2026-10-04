@@ -1,498 +1,770 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUiStore } from '../store/uiStore';
 import { useAuthStore } from '../store/authStore';
-import { useScrollReveal } from '../hooks/useScrollReveal';
 import {
   Sparkles,
-  ShieldCheck,
-  Zap,
-  ScanSearch,
-  FileText,
-  CheckCircle2,
-  TrendingUp,
   ArrowRight,
-  Target,
-  BarChart3,
-  Layers,
-  Crown,
-  Check,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
-  Star,
-  Flame,
+  Target,
+  FileText,
+  ScanSearch,
+  Check,
+  Zap,
+  TrendingUp,
   Award,
-  Users,
-  Compass,
+  ShieldCheck,
+  Briefcase,
+  Layers,
 } from 'lucide-react';
 
 export const LandingPage = () => {
   const { openAuthModal } = useUiStore();
   const { isAuthenticated } = useAuthStore();
-
-  // Activate scroll reveals
-  useScrollReveal();
-
-  // Interactive ATS Score Estimator State
-  const [hasStandardFormat, setHasStandardFormat] = useState(true);
-  const [hasMetrics, setHasMetrics] = useState(true);
-  const [hasKeywords, setHasKeywords] = useState(true);
-  const [hasActionVerbs, setHasActionVerbs] = useState(true);
+  const navigate = useNavigate();
 
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState(0);
 
-  const calculateDemoScore = () => {
-    let score = 40;
-    if (hasStandardFormat) score += 18;
-    if (hasMetrics) score += 16;
-    if (hasKeywords) score += 14;
-    if (hasActionVerbs) score += 8;
-    return Math.min(score, 98);
+  // Interactive Live Rewrite Bullet State
+  const [isRewritten, setIsRewritten] = useState(false);
+
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? -1 : index);
   };
 
-  const currentScore = calculateDemoScore();
+  const handleStartCTA = () => {
+    if (isAuthenticated) {
+      navigate('/builder');
+    } else {
+      openAuthModal('register');
+    }
+  };
 
   const faqs = [
     {
-      q: 'Why do most resumes get rejected before a human sees them?',
-      a: 'Over 75% of resumes fail ATS parsers because of complex multi-column layouts, graphics, text boxes, and missing semantic keywords from the job description. CareerCraft rebuilds yours in a single-column, machine-readable structure that passes parsing algorithms 100% of the time.',
+      q: 'Why do most résumés get rejected before a human sees them?',
+      a: 'Over 75% of candidates fail automated Applicant Tracking Systems (ATS) due to non-standard multi-column tables, unparseable graphics, complex icons, or missing semantic job keywords. CareerCraft ensures single-stream, machine-parseable structures while remaining visually stunning for human eyes.',
     },
     {
-      q: 'How does the X-Y-Z rewrite formula work?',
-      a: 'Developed by former Google recruiters, the formula structures every bullet point as: "Accomplished [X], as measured by [Y], by doing [Z]". CareerCraft automatically restructures passive duties into high-impact, quantified achievement statements that recruiters prioritize.',
+      q: 'How does the Gemini AI bullet rewrite formula work?',
+      a: 'Our intelligence engine follows the proven Google executive formula: "Accomplished [X], as measured by [Y], by doing [Z]". We take your raw responsibilities and transform them into quantified, action-oriented leadership statements that pass screening algorithms with top percentile scores.',
     },
     {
-      q: 'Can I upload my existing resume and get a score right away?',
-      a: 'Yes! Simply navigate to the ATS scanner, upload your PDF resume, and optionally paste the job description you are targeting. You will receive an instant 0–100 score and a breakdown of formatting, keywords, and action verbs within seconds.',
+      q: 'Can I upload my existing PDF résumé and get an instant score?',
+      a: 'Yes. Simply navigate to our ATS Scanner, drop your PDF or paste your plain text, and optionally paste your target job description. You receive an instant 0–100 score, missing keyword gaps, recruiter skim alerts, and syntax suggestions.',
     },
     {
-      q: 'Are the exported PDFs selectable and searchable?',
-      a: 'Absolutely. We export crisp, vector-based text PDFs that are 100% selectable and machine-readable by enterprise ATS platforms including Workday, Taleo, Greenhouse, Lever, and iCIMS.',
+      q: 'Are the exported PDF files ATS-compliant and vector-searchable?',
+      a: 'Every export from CareerCraft produces clean, vector-based, 100% selectable text PDFs. They are benchmarked against Workday, Greenhouse, Lever, Taleo, and iCIMS parsers without losing typography hierarchy or styling.',
+    },
+    {
+      q: 'What is included in the Pro trial?',
+      a: 'You get full access to all three executive templates, unlimited Gemini AI bullet rewrites, unlimited ATS scans against custom job descriptions, and high-resolution PDF exports with no watermarks.',
     },
   ];
 
   return (
-    <div className="relative overflow-hidden space-y-24 pb-24 bg-[#F8F8FB]">
-      {/* Soft ambient background glows */}
-      <div className="ambient-glow ambient-indigo w-[680px] h-[680px] -top-32 left-1/2 -translate-x-1/2 opacity-40 pointer-events-none" />
-      <div className="ambient-glow ambient-cyan w-[450px] h-[450px] top-[800px] -right-24 opacity-35 pointer-events-none" />
-
-      {/* 1. Hero Section */}
-      <section className="relative pt-12 sm:pt-20 px-4 max-w-6xl mx-auto text-center space-y-8 z-10 reveal-fade-up is-revealed">
-        {/* Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F0FF] border border-[#d7cffe] text-[#7B61FF] text-xs font-bold tracking-wide shadow-xs hover:shadow-sm transition-all">
-          <Sparkles className="w-3.5 h-3.5 text-[#7B61FF]" />
-          <span>Built on Google Gemini</span>
+    <div className="bg-[#F7F4ED] text-[#15130F] font-sans overflow-hidden">
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* 1. FULL-BLEED HERO SECTION                                   */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      <section className="relative w-full min-h-[92vh] lg:min-h-[96vh] flex flex-col justify-between pt-24 sm:pt-28 pb-12 sm:pb-24">
+        {/* Full-bleed Editorial Background Photo */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <img
+            src="/hero-landscape.jpg"
+            alt="Rolling golden-hour landscape"
+            className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+          />
+          {/* Subtle gradient overlays to ensure text & card contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/60 pointer-events-none" />
         </div>
 
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight max-w-4xl mx-auto leading-[1.14]">
-          Built to pass the bot. <br className="hidden sm:inline" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7B61FF] via-[#9176FF] to-[#2D9CDB]">
-            Built to land the interview.
-          </span>
-        </h1>
+        {/* Hero Content (Centered) */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center mt-12 sm:mt-16 lg:mt-20">
+          <h1 className="font-serif text-4xl sm:text-6xl lg:text-[76px] font-normal leading-[1.08] tracking-tight text-white max-w-4xl mx-auto drop-shadow-sm">
+            Craft your résumé <br />
+            <span className="italic font-light">effortlessly, beautifully.</span>
+          </h1>
 
-        {/* Subtitle */}
-        <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal">
-          Most resumes never reach a human. They're rejected by the parser before anyone opens the PDF. CareerCraft rebuilds yours in a format every applicant tracking system can read, then rewrites each line the way top recruiters actually skim.
-        </p>
+          <p className="mt-6 text-sm sm:text-base lg:text-lg text-white/90 max-w-2xl mx-auto font-sans font-normal leading-relaxed drop-shadow-xs">
+            CareerCraft helps you write, tailor and score résumés with intelligent AI —
+            all in one calm, minimal workspace.
+          </p>
 
-        {/* Action Buttons & Subtext */}
-        <div className="space-y-3 pt-2">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            {isAuthenticated ? (
-              <Link
-                to="/builder"
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white bg-[#7B61FF] hover:bg-[#6B4FE0] shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-              >
-                <FileText className="w-5 h-5" />
-                <span>Build my resume</span>
-              </Link>
-            ) : (
-              <button
-                onClick={() => openAuthModal('register')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white bg-[#7B61FF] hover:bg-[#6B4FE0] shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-              >
-                <Sparkles className="w-5 h-5 text-amber-300" />
-                <span>Build my resume free</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            )}
+          {/* Hero Pill Buttons */}
+          <div className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <button
+              onClick={handleStartCTA}
+              className="inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-full bg-white text-[#15130F] hover:bg-[#FAF8F3] font-medium text-sm transition-all duration-200 shadow-md active:scale-[0.98]"
+            >
+              <span>Start free trial</span>
+              <span className="w-5 h-5 rounded-full bg-[#15130F] text-white flex items-center justify-center text-xs">
+                →
+              </span>
+            </button>
 
             <Link
-              to="/analyzer"
-              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-[#7B61FF] bg-[#F3F0FF] hover:bg-[#EAE5FE] border border-[#d7cffe] shadow-xs hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              to="/pricing"
+              className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-black/25 hover:bg-black/35 text-white border border-white/30 backdrop-blur-md font-medium text-sm transition-all duration-200 active:scale-[0.98]"
             >
-              <ScanSearch className="w-5 h-5 text-[#7B61FF]" />
-              <span>Scan my current resume</span>
+              <span>See pricing</span>
+              <span className="text-white/80">›</span>
             </Link>
           </div>
-
-          <p className="text-xs text-slate-500 font-medium">
-            No credit card · Export in under 10 minutes
-          </p>
         </div>
 
-        {/* Candidate Card & Hero Stats */}
-        <div className="pt-6 max-w-4xl mx-auto space-y-6">
-          {/* Candidate Card */}
-          <div className="group p-5 sm:p-6 bg-white rounded-3xl border border-slate-200/90 shadow-card hover:shadow-card-hover card-interactive flex flex-col sm:flex-row items-center justify-between gap-4 max-w-2xl mx-auto transition-all duration-300">
-            <div className="flex items-center gap-4 text-left">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7B61FF] to-[#2D9CDB] text-white flex items-center justify-center font-extrabold text-lg shadow-sm group-hover:scale-105 group-hover:rotate-2 transition-all duration-300">
-                PS
+        {/* ──────────────────────────────────────────────────────────── */}
+        {/* 2. FLOATING PREVIEW CARDS (Overlapping bottom edge of hero)    */}
+        {/* ──────────────────────────────────────────────────────────── */}
+        <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+            {/* Card 1: Résumé Score */}
+            <div className="bg-[#FAF8F3]/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-[#15130F]/10 text-[#15130F] shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-medium text-[#5C564E]">Résumé score</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-[#7B61FF] transition-colors">Priya Sharma</h3>
-                  <span className="text-xs px-2.5 py-0.5 bg-[#F3F0FF] text-[#7B61FF] rounded-full font-semibold border border-[#d7cffe]">
-                    Senior Product Engineer
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-1.5 pt-0.5">
-                  {['React', 'AWS', 'stakeholder mgmt', 'CI/CD', 'Agile'].map((skill, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-0.5 bg-slate-100 text-slate-700 text-[11px] rounded-md font-mono hover:bg-[#F3F0FF] hover:text-[#7B61FF] hover:border-[#bba9fd] hover:scale-105 transition-all duration-200 cursor-default"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+              <div className="flex items-baseline justify-between mb-1.5">
+                <span className="text-xs sm:text-sm font-semibold text-[#15130F]">
+                  Senior PM draft
+                </span>
+                <span className="font-serif text-lg font-normal text-[#B8571E]">92%</span>
+              </div>
+              {/* Progress bar */}
+              <div className="w-full bg-[#E8E3D7] rounded-full h-1.5 overflow-hidden mb-3">
+                <div
+                  className="bg-[#B8571E] h-1.5 rounded-full transition-all duration-500"
+                  style={{ width: '92%' }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-[11px] text-[#5C564E] pt-2 border-t border-[#15130F]/10">
+                <span>ATS · 96/100</span>
+                <span>Tone · A+</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 sm:border-l sm:border-slate-100 sm:pl-6 shrink-0">
-              <div className="text-right">
-                <div className="text-2xl font-extrabold text-[#7B61FF] group-hover:scale-110 transition-transform duration-300">96</div>
-                <div className="text-[11px] text-slate-500 font-medium">ATS score</div>
+            {/* Card 2: AI Coach */}
+            <div className="bg-[#FAF8F3]/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-[#15130F]/10 text-[#15130F] shadow-sm">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-xs font-medium text-[#5C564E]">AI coach</span>
+                <span className="text-[10px] text-amber-700 font-semibold px-2 py-0.5 rounded-full bg-amber-100">
+                  Active
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5 mb-3">
+                <div className="w-6 h-6 rounded-full bg-[#B8571E] text-white flex items-center justify-center text-xs shrink-0 mt-0.5">
+                  ✦
+                </div>
+                <p className="text-xs text-[#25211C] leading-relaxed">
+                  Try opening this bullet with a measurable result — recruiters skim the first four words.
+                </p>
+              </div>
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#15130F]/10">
+                <button
+                  type="button"
+                  className="px-3 py-1 rounded-full text-[11px] font-medium text-[#5C564E] hover:text-[#15130F]"
+                >
+                  Skip
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsRewritten(!isRewritten)}
+                  className="px-3 py-1 rounded-full text-[11px] font-medium bg-[#B8571E] text-white hover:bg-[#A04815] transition"
+                >
+                  Apply suggestion
+                </button>
+              </div>
+            </div>
+
+            {/* Card 3: Job Match */}
+            <div className="bg-[#FAF8F3]/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-[#15130F]/10 text-[#15130F] shadow-sm">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-xs font-medium text-[#5C564E]">Job match</span>
+                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  94% match
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-7 h-7 rounded-lg bg-[#2E3A4F] text-white flex items-center justify-center text-xs font-bold shrink-0">
+                  N
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-[#15130F] leading-tight">Senior PM</p>
+                  <p className="text-[11px] text-[#5C564E]">Northwave Labs · Remote</p>
+                </div>
+              </div>
+              {/* URL bar with verification */}
+              <div className="flex items-center justify-between px-3 py-1.5 rounded-full bg-[#EFECE3] border border-[#15130F]/10 text-[11px] text-[#5C564E]">
+                <span className="truncate max-w-[190px]">linkedin.com/jobs/4881920</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 ml-1" />
               </div>
             </div>
           </div>
-
-          {/* 4 Stats Grid with subtle float, hover lift & soft drop shadows */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-card hover:shadow-card-hover hover:-translate-y-2 card-interactive animate-float text-center space-y-0.5 transition-all duration-300 cursor-default">
-              <div className="text-2xl font-extrabold text-slate-900">92%</div>
-              <div className="text-xs text-slate-500 font-medium">avg. parser accuracy</div>
-            </div>
-            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-card hover:shadow-card-hover hover:-translate-y-2 card-interactive animate-float-delayed text-center space-y-0.5 transition-all duration-300 cursor-default">
-              <div className="text-2xl font-extrabold text-slate-900">2.1x</div>
-              <div className="text-xs text-slate-500 font-medium">more callbacks reported</div>
-            </div>
-            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-card hover:shadow-card-hover hover:-translate-y-2 card-interactive animate-float text-center space-y-0.5 transition-all duration-300 cursor-default">
-              <div className="text-2xl font-extrabold text-slate-900">~90s</div>
-              <div className="text-xs text-slate-500 font-medium">per full rewrite pass</div>
-            </div>
-            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-card hover:shadow-card-hover hover:-translate-y-2 card-interactive animate-float-delayed text-center space-y-0.5 transition-all duration-300 cursor-default">
-              <div className="text-sm font-extrabold text-[#7B61FF] hover:text-[#6B4FE0] transition-colors pt-1">Workday · Taleo · Greenhouse</div>
-              <div className="text-xs text-slate-500 font-medium">tested parsers</div>
-            </div>
-          </div>
-
-          <p className="text-[11px] text-slate-400">
-            Figures reflect internal testing across a sample of user resumes, not a guarantee of individual results.
-          </p>
         </div>
       </section>
 
-      {/* 2. Interactive Section */}
-      <section id="simulator" className="max-w-6xl mx-auto px-4 relative z-10 reveal-mask-in">
-        <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/90 shadow-card hover:shadow-card-hover card-interactive relative overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Controls */}
-            <div className="lg:col-span-6 space-y-5">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#F3F0FF] text-[#7B61FF] text-xs font-bold font-mono border border-[#d7cffe]">
-                <Target className="w-3.5 h-3.5" /> Interactive
-              </div>
-
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                See what the parser sees, before you hit submit
-              </h2>
-
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Every applicant tracking system scores a resume against the same handful of rules. Flip each one to watch the score move — this is the exact logic CareerCraft applies when it rewrites your document.
-              </p>
-
-              {/* Interactive Toggle Checkboxes */}
-              <div className="space-y-2.5 pt-1">
-                <div
-                  onClick={() => setHasStandardFormat(!hasStandardFormat)}
-                  className={`group p-3.5 rounded-xl border cursor-pointer flex items-center justify-between transition-all duration-200 active:scale-[0.99] ${
-                    hasStandardFormat
-                      ? 'bg-[#F3F0FF]/80 border-[#bba9fd] text-slate-900 shadow-xs'
-                      : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/70 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 text-xs font-semibold">
-                    <div className={`w-5 h-5 rounded-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110 ${hasStandardFormat ? 'bg-[#7B61FF] text-white shadow-xs' : 'bg-slate-200 text-transparent'}`}>
-                      <Check className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <div className="font-bold group-hover:text-[#7B61FF] transition-colors">Single-column layout</div>
-                      <div className="text-[11px] font-normal text-slate-500">No tables, text boxes, or multi-column parsing errors</div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-[#7B61FF] group-hover:scale-110 transition-transform">+18</span>
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* 3. THE OUTCOME / INTERACTIVE REWRITE WORKSPACE               */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[#15130F]/10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          {/* Left Mockup Panel (7 cols on lg) */}
+          <div className="lg:col-span-7 order-2 lg:order-1">
+            <div className="bg-[#FAF8F3] border border-[#15130F]/15 rounded-3xl p-5 sm:p-7 shadow-xs">
+              {/* Browser window chrome dots */}
+              <div className="flex items-center justify-between pb-4 border-b border-[#15130F]/10 mb-5">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-rose-400"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+                  <span className="ml-3 text-xs font-medium text-[#5C564E]">
+                    Aria Bennett — Senior PM
+                  </span>
                 </div>
-
-                <div
-                  onClick={() => setHasMetrics(!hasMetrics)}
-                  className={`group p-3.5 rounded-xl border cursor-pointer flex items-center justify-between transition-all duration-200 active:scale-[0.99] ${
-                    hasMetrics
-                      ? 'bg-[#F3F0FF]/80 border-[#bba9fd] text-slate-900 shadow-xs'
-                      : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/70 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 text-xs font-semibold">
-                    <div className={`w-5 h-5 rounded-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110 ${hasMetrics ? 'bg-[#7B61FF] text-white shadow-xs' : 'bg-slate-200 text-transparent'}`}>
-                      <Check className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <div className="font-bold group-hover:text-[#7B61FF] transition-colors">Quantified bullet points</div>
-                      <div className="text-[11px] font-normal text-slate-500">Percentages, dollar figures, and scale — not just duties</div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-[#7B61FF] group-hover:scale-110 transition-transform">+16</span>
-                </div>
-
-                <div
-                  onClick={() => setHasKeywords(!hasKeywords)}
-                  className={`group p-3.5 rounded-xl border cursor-pointer flex items-center justify-between transition-all duration-200 active:scale-[0.99] ${
-                    hasKeywords
-                      ? 'bg-[#F3F0FF]/80 border-[#bba9fd] text-slate-900 shadow-xs'
-                      : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/70 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 text-xs font-semibold">
-                    <div className={`w-5 h-5 rounded-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110 ${hasKeywords ? 'bg-[#7B61FF] text-white shadow-xs' : 'bg-slate-200 text-transparent'}`}>
-                      <Check className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <div className="font-bold group-hover:text-[#7B61FF] transition-colors">Keyword match to the job post</div>
-                      <div className="text-[11px] font-normal text-slate-500">Terms pulled from the actual listing you're applying to</div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-[#7B61FF] group-hover:scale-110 transition-transform">+14</span>
-                </div>
-
-                <div
-                  onClick={() => setHasActionVerbs(!hasActionVerbs)}
-                  className={`group p-3.5 rounded-xl border cursor-pointer flex items-center justify-between transition-all duration-200 active:scale-[0.99] ${
-                    hasActionVerbs
-                      ? 'bg-[#F3F0FF]/80 border-[#bba9fd] text-slate-900 shadow-xs'
-                      : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/70 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 text-xs font-semibold">
-                    <div className={`w-5 h-5 rounded-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110 ${hasActionVerbs ? 'bg-[#7B61FF] text-white shadow-xs' : 'bg-slate-200 text-transparent'}`}>
-                      <Check className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <div className="font-bold group-hover:text-[#7B61FF] transition-colors">Specific action verbs</div>
-                      <div className="text-[11px] font-normal text-slate-500">"Engineered," "Led," "Cut" — not "Responsible for"</div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-[#7B61FF] group-hover:scale-110 transition-transform">+8</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Meter Result */}
-            <div className="lg:col-span-6 flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-[#F8F8FB] to-white border border-slate-200/90 space-y-6 text-center shadow-inner">
-              <div className="relative w-44 h-44 flex items-center justify-center">
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    stroke="#e9ebf2"
-                    strokeWidth="8"
-                    fill="transparent"
-                  />
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    stroke={currentScore >= 80 ? '#7B61FF' : currentScore >= 60 ? '#f59e0b' : '#dc2626'}
-                    strokeWidth="8"
-                    fill="transparent"
-                    strokeDasharray={251.2}
-                    strokeDashoffset={251.2 - (251.2 * currentScore) / 100}
-                    strokeLinecap="round"
-                    className="transition-all duration-700 ease-out"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span key={currentScore} className="text-4xl font-extrabold text-slate-900 tracking-tight inline-block animate-in zoom-in-90 duration-200">{currentScore}</span>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">ATS Score</span>
+                <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>AI coach active</span>
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <div className="text-base font-bold text-slate-900">
-                  {currentScore >= 85 ? 'Likely to clear most parsers' : 'May face parsing filter issues'}
+              {/* Coach Header */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#B8571E] text-white flex items-center justify-center text-xs">
+                    ✦
+                  </span>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#15130F]">CareerCraft Coach</h4>
+                    <p className="text-[11px] text-[#5C564E]">Suggesting a stronger rewrite</p>
+                  </div>
                 </div>
-                <p className="text-xs text-slate-500">
-                  Base score 40 · toggle criteria above
+                <span className="px-2.5 py-0.5 rounded-full bg-[#D8C9A8] text-[#15130F] text-[10px] font-semibold tracking-wide">
+                  REWRITING
+                </span>
+              </div>
+
+              {/* Original Bullet (Before) */}
+              <div className="p-3.5 rounded-xl bg-white border border-[#15130F]/10 mb-3">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[10px] font-bold text-[#8A8277] uppercase tracking-wider">
+                    Original bullet (before)
+                  </span>
+                  <span className="text-[10px] text-rose-600 font-medium">Passive tone</span>
+                </div>
+                <p className="text-xs text-[#5C564E] font-sans line-through decoration-rose-400/70">
+                  Managed projects across the team and helped ship features on time.
                 </p>
               </div>
 
+              {/* Trigger Button */}
+              <div className="flex justify-center my-3">
+                <button
+                  type="button"
+                  onClick={() => setIsRewritten(!isRewritten)}
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#15130F] text-[#F7F4ED] hover:bg-[#2A1F18] text-xs font-medium transition active:scale-95"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>{isRewritten ? 'Reset sample' : '+ AI rewrite with metrics'}</span>
+                </button>
+              </div>
+
+              {/* Recruiter Ready Bullet (After) */}
+              <div className="p-4 rounded-xl bg-[#FAF8F3] border-2 border-[#3D4A2E] mb-5">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-bold text-[#3D4A2E] uppercase tracking-wider flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-[#3D4A2E]" />
+                    Recruiter-ready bullet
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                    97% ATS score
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-[#15130F] leading-relaxed font-medium">
+                  Led a <span className="bg-[#D8C9A8]/60 px-1 py-0.5 rounded">6-person cross-functional team</span> to ship{' '}
+                  <span className="bg-[#D8C9A8]/60 px-1 py-0.5 rounded">3 major product launches</span> ahead of schedule, lifting user activation{' '}
+                  <span className="bg-emerald-100 text-emerald-900 px-1 py-0.5 rounded font-semibold">
+                    14% quarter over quarter
+                  </span>.
+                </p>
+              </div>
+
+              {/* Metrics bar */}
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#15130F]/10">
+                <div className="p-2.5 rounded-xl bg-white border border-[#15130F]/10">
+                  <p className="text-[10px] text-[#5C564E]">Match score lift</p>
+                  <p className="font-serif text-lg text-[#15130F] font-normal">+42%</p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-white border border-[#15130F]/10">
+                  <p className="text-[10px] text-[#5C564E]">Average build time</p>
+                  <p className="font-serif text-lg text-[#15130F] font-normal">Under 5m</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Narrative Copy (5 cols on lg) */}
+          <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EFECE3] text-[#B8571E] border border-[#15130F]/10">
+              ● The outcome
+            </span>
+
+            <h2 className="font-serif text-3xl sm:text-5xl font-normal leading-[1.12] tracking-tight text-[#15130F]">
+              AI-powered, <br />
+              <span className="italic font-light">interview-ready</span> résumés.
+            </h2>
+
+            <p className="text-sm sm:text-base text-[#5C564E] leading-relaxed max-w-prose">
+              CareerCraft rewrites every bullet for clarity and impact, then benchmarks
+              the result against thousands of recent hires across your role, industry and
+              seniority band.
+            </p>
+
+            <div className="pt-2">
               <Link
                 to="/builder"
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold text-white bg-[#7B61FF] hover:bg-[#6B4FE0] shadow-md hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#15130F] text-[#F7F4ED] hover:bg-[#2A1F18] font-medium text-sm transition-all duration-200"
               >
-                <span>Build with these rules</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <span>See how it works</span>
+                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                  →
+                </span>
               </Link>
+            </div>
+
+            {/* 3 Bottom Metrics */}
+            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[#15130F]/10 text-left">
+              <div>
+                <p className="font-serif text-2xl sm:text-3xl text-[#15130F] font-normal">
+                  40%
+                </p>
+                <p className="text-[11px] text-[#5C564E] mt-1 uppercase tracking-wider font-medium">
+                  Higher ATS match rate
+                </p>
+              </div>
+              <div>
+                <p className="font-serif text-2xl sm:text-3xl text-[#15130F] font-normal">
+                  32%
+                </p>
+                <p className="text-[11px] text-[#5C564E] mt-1 uppercase tracking-wider font-medium">
+                  More recruiter callbacks
+                </p>
+              </div>
+              <div>
+                <p className="font-serif text-2xl sm:text-3xl text-[#15130F] font-normal">
+                  3×
+                </p>
+                <p className="text-[11px] text-[#5C564E] mt-1 uppercase tracking-wider font-medium">
+                  Faster creation time
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. Before & After Section */}
-      <section className="max-w-6xl mx-auto px-4 space-y-8 relative z-10 reveal-fade-up">
-        <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F3F0FF] border border-[#d7cffe] text-[#7B61FF] text-xs font-bold shadow-xs">
-            <Flame className="w-3.5 h-3.5 text-amber-500" />
-            Before & after
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            The same job, told two ways
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* 4. ASYMMETRIC SOLID-COLOR FEATURE GRID                      */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      <section id="features" className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[#15130F]/10">
+        <div className="max-w-3xl mb-12 sm:mb-16">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EFECE3] text-[#3D4A2E] border border-[#15130F]/10 mb-4">
+            ● Features
+          </span>
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal leading-[1.12] tracking-tight text-[#15130F]">
+            Quietly powerful, <span className="italic font-light">start to finish.</span>
           </h2>
-          <p className="text-sm text-slate-600 max-w-xl mx-auto">
-            Nothing here is invented. CareerCraft keeps what you actually did and changes how it's said — sharper verb, real metric, less throat-clearing.
+          <p className="mt-4 text-sm sm:text-base text-[#5C564E] leading-relaxed max-w-2xl">
+            From AI-powered writing to ATS optimization — everything you need to land
+            your next interview in one calm workspace.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Example 1 */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/90 space-y-4 shadow-card hover:shadow-card-hover card-interactive reveal-fade-up reveal-delay-1">
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-              <span className="text-[10px] font-bold text-slate-500 font-mono uppercase tracking-wider">
-                Draft · Score 44
-              </span>
-              <p className="text-xs text-slate-700 italic">
-                "Responsible for managing servers, database updates, and solving user reported bugs."
+        {/* Asymmetric 2x2 Grid of Solid Flat Color Blocks */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+          {/* Block 1: Olive / Forest Green (#3D4A2E) */}
+          <div className="bg-[#3D4A2E] text-white p-7 sm:p-9 rounded-3xl flex flex-col justify-between min-h-[380px] sm:min-h-[440px]">
+            <div>
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm mb-6">
+                ✦
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-white mb-3">
+                AI writes it for you
+              </h3>
+              <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-md font-sans">
+                Smart prompts turn rough notes into crisp bullets — tone, verbs and impact
+                tuned to the role you actually want.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#F3F0FF]/70 border border-[#d7cffe] space-y-2">
-              <span className="text-[10px] font-bold text-[#7B61FF] font-mono uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-500" /> Rewritten · Score 96
-              </span>
-              <p className="text-xs sm:text-sm text-slate-900 font-semibold leading-relaxed">
-                "Engineered automated cloud infrastructure and a Redis caching layer, cutting mean time to resolution 54% while holding 99.99% uptime across 2M+ monthly users."
+            {/* Mockup snippet inside Olive block */}
+            <div className="mt-8 bg-white/10 rounded-2xl p-4 border border-white/20 backdrop-blur-xs">
+              <div className="flex items-center justify-between text-xs text-white/70 mb-2">
+                <span className="font-mono text-[11px]">Professional summary</span>
+                <span className="text-amber-300 text-[11px]">Auto-enhanced</span>
+              </div>
+              <p className="text-xs text-white leading-relaxed">
+                "Experienced Business Development Manager bringing significant value and a
+                genuine passion for team development. Proven record of growing accounts,
+                fostering strong client relationships and executing innovative strategies..."
               </p>
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                <span className="px-2 py-0.5 bg-white border border-[#d7cffe] rounded text-[10px] text-[#7B61FF] font-mono font-medium hover:scale-105 hover:border-[#7B61FF] hover:bg-[#F3F0FF] transition-all cursor-default">Engineered</span>
-                <span className="px-2 py-0.5 bg-white border border-[#d7cffe] rounded text-[10px] text-[#7B61FF] font-mono font-medium hover:scale-105 hover:border-[#7B61FF] hover:bg-[#F3F0FF] transition-all cursor-default">54% MTTR</span>
-                <span className="px-2 py-0.5 bg-white border border-[#d7cffe] rounded text-[10px] text-[#7B61FF] font-mono font-medium hover:scale-105 hover:border-[#7B61FF] hover:bg-[#F3F0FF] transition-all cursor-default">99.99% uptime</span>
+            </div>
+          </div>
+
+          {/* Block 2: Burnt Terracotta / Rust (#B8571E) */}
+          <div className="bg-[#B8571E] text-white p-7 sm:p-9 rounded-3xl flex flex-col justify-between min-h-[380px] sm:min-h-[440px]">
+            <div>
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm mb-6">
+                ✓
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-white mb-3">
+                Guided résumé flow
+              </h3>
+              <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-md font-sans">
+                Build your résumé step-by-step with clear prompts. No blank page
+                paralysis — just follow the calm sequence.
+              </p>
+            </div>
+
+            {/* Mockup checklist inside Terracotta block */}
+            <div className="mt-8 bg-white/10 rounded-2xl p-4 border border-white/20 space-y-2.5">
+              <div className="flex items-center justify-between bg-white/15 px-3 py-2 rounded-xl text-xs">
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-white/30 flex items-center justify-center text-[10px]">
+                    1
+                  </span>
+                  Personal details
+                </span>
+                <Check className="w-3.5 h-3.5 text-white" />
+              </div>
+              <div className="flex items-center justify-between bg-white/15 px-3 py-2 rounded-xl text-xs">
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-white/30 flex items-center justify-center text-[10px]">
+                    2
+                  </span>
+                  Professional summary
+                </span>
+                <Check className="w-3.5 h-3.5 text-white" />
+              </div>
+              <div className="flex items-center justify-between bg-white/25 px-3 py-2 rounded-xl text-xs font-semibold">
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-white text-[#B8571E] flex items-center justify-center text-[10px] font-bold">
+                    3
+                  </span>
+                  Core skills & metrics
+                </span>
+                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">Current</span>
               </div>
             </div>
           </div>
 
-          {/* Example 2 */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/90 space-y-4 shadow-card hover:shadow-card-hover card-interactive reveal-fade-up reveal-delay-2">
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-              <span className="text-[10px] font-bold text-slate-500 font-mono uppercase tracking-wider">
-                Draft · Score 50
-              </span>
-              <p className="text-xs text-slate-700 italic">
-                "Built frontend web features in React and created UI components for the team."
+          {/* Block 3: Warm Tan / Sand (#D8C9A8) */}
+          <div className="bg-[#D8C9A8] text-[#15130F] p-7 sm:p-9 rounded-3xl flex flex-col justify-between min-h-[380px] sm:min-h-[440px]">
+            <div>
+              <div className="w-8 h-8 rounded-full bg-[#15130F]/10 flex items-center justify-center text-sm mb-6">
+                %
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-[#15130F] mb-3">
+                Résumé quality score
+              </h3>
+              <p className="text-xs sm:text-sm text-[#25211C] leading-relaxed max-w-md font-sans">
+                See exactly how strong your résumé is — with clear, actionable feedback at
+                every step before you submit.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#F3F0FF]/70 border border-[#d7cffe] space-y-2">
-              <span className="text-[10px] font-bold text-[#7B61FF] font-mono uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-500" /> Rewritten · Score 95
-              </span>
-              <p className="text-xs sm:text-sm text-slate-900 font-semibold leading-relaxed">
-                "Architected a reusable React component library and shipped code-splitting that cut load time from 3.8s to 0.9s, lifting funnel conversion 28%."
+            {/* Circular score gauge snippet */}
+            <div className="mt-8 bg-white/60 rounded-2xl p-5 border border-[#15130F]/10 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-[#5C564E]">CareerCraft score</p>
+                <p className="text-sm font-semibold text-[#15130F] mt-0.5">Almost there</p>
+                <p className="text-[11px] text-[#5C564E] mt-1">2 quick fixes to hit 90%+</p>
+              </div>
+              <div className="relative w-16 h-16 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full border-4 border-[#15130F]/15 border-t-[#B8571E] flex items-center justify-center font-serif text-lg font-normal text-[#15130F]">
+                  88%
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Block 4: Muted Navy-Slate (#2E3A4F) */}
+          <div className="bg-[#2E3A4F] text-white p-7 sm:p-9 rounded-3xl flex flex-col justify-between min-h-[380px] sm:min-h-[440px]">
+            <div>
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm mb-6">
+                ⚡
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-white mb-3">
+                Match any job instantly
+              </h3>
+              <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-md font-sans">
+                Drop a job description link — CareerCraft learns what the recruiter wants
+                and fine-tunes your résumé keywords.
               </p>
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                <span className="px-2 py-0.5 bg-white border border-[#d7cffe] rounded text-[10px] text-[#7B61FF] font-mono font-medium hover:scale-105 hover:border-[#7B61FF] hover:bg-[#F3F0FF] transition-all cursor-default">Architected</span>
-                <span className="px-2 py-0.5 bg-white border border-[#d7cffe] rounded text-[10px] text-[#7B61FF] font-mono font-medium hover:scale-105 hover:border-[#7B61FF] hover:bg-[#F3F0FF] transition-all cursor-default">0.9s load</span>
-                <span className="px-2 py-0.5 bg-white border border-[#d7cffe] rounded text-[10px] text-[#7B61FF] font-mono font-medium hover:scale-105 hover:border-[#7B61FF] hover:bg-[#F3F0FF] transition-all cursor-default">+28% conversion</span>
+            </div>
+
+            {/* Search/URL Mockup */}
+            <div className="mt-8 bg-white/10 rounded-2xl p-4 border border-white/20">
+              <label className="text-[11px] text-white/70 block mb-2">
+                Paste a link to the job you want
+              </label>
+              <div className="flex items-center gap-2 bg-white/20 px-3 py-2 rounded-xl text-xs text-white">
+                <span className="truncate">https://recruiter.com/jobs/senior-lead</span>
+                <span className="ml-auto text-[11px] bg-white text-[#2E3A4F] px-2 py-0.5 rounded-full font-semibold">
+                  Match
+                </span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. What's included Section */}
-      <section id="features" className="max-w-6xl mx-auto px-4 space-y-12 relative z-10 reveal-scale-in">
-        <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F3F0FF] border border-[#d7cffe] text-[#7B61FF] text-xs font-bold uppercase tracking-wider shadow-xs">
-            What's included
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Everything between a blank page and an offer
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="group bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 space-y-4 hover:border-[#bba9fd] shadow-card hover:shadow-card-hover card-interactive reveal-scale-in reveal-delay-1">
-            <div className="text-xs font-mono font-bold text-[#7B61FF] group-hover:translate-x-1 transition-transform inline-block">01 / builder</div>
-            <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#7B61FF] transition-colors">Guided 7-step builder</h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Fill in experience, education, and skills section by section, with a live preview that updates as you type and never locks you out of raw editing.
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* 5. FULL-WIDTH DARK STATS & TRUST SECTION                    */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      <section className="bg-[#15130F] text-[#F7F4ED] py-24 sm:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-16 sm:mb-20 text-left">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-amber-300 border border-white/15 mb-4">
+              ● Why CareerCraft
+            </span>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal leading-[1.1] tracking-tight text-[#F7F4ED]">
+              Trusted to <span className="italic font-light">quietly</span> get you hired.
+            </h2>
+            <p className="mt-5 text-sm sm:text-base text-[#F7F4ED]/75 leading-relaxed max-w-2xl font-sans">
+              Smart AI, considered templates and ATS-friendly outputs — everything you
+              need to get an interview, faster.
             </p>
-          </div>
 
-          <div className="group bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 space-y-4 hover:border-[#bba9fd] shadow-card hover:shadow-card-hover card-interactive reveal-scale-in reveal-delay-2">
-            <div className="text-xs font-mono font-bold text-[#7B61FF] group-hover:translate-x-1 transition-transform inline-block">02 / scanner</div>
-            <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#7B61FF] transition-colors">6-point ATS scan</h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Upload an existing PDF to check formatting, keyword coverage, verb strength, and metric density, with a breakdown of exactly what to fix first.
-            </p>
-          </div>
-
-          <div className="group bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 space-y-4 hover:border-[#bba9fd] shadow-card hover:shadow-card-hover card-interactive reveal-scale-in reveal-delay-3">
-            <div className="text-xs font-mono font-bold text-[#7B61FF] group-hover:translate-x-1 transition-transform inline-block">03 / templates</div>
-            <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#7B61FF] transition-colors">Three parser-safe layouts</h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Minimalist, Executive, and Technical templates, each built as a single column with no tables or text boxes so nothing gets scrambled on import.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Questions / Frequently asked Section */}
-      <section id="faq" className="max-w-4xl mx-auto px-4 space-y-8 relative z-10 reveal-fade-up">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F3F0FF] border border-[#d7cffe] text-[#7B61FF] text-xs font-bold uppercase tracking-wider shadow-xs">
-            Questions
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Frequently asked
-          </h2>
-        </div>
-
-        <div className="space-y-3">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaq === idx;
-            return (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:border-[#bba9fd] transition-all card-interactive"
+            <div className="mt-8">
+              <button
+                onClick={handleStartCTA}
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#F7F4ED] text-[#15130F] hover:bg-white font-medium text-sm transition-all duration-200"
               >
+                <span>Build my résumé now</span>
+                <span className="w-5 h-5 rounded-full bg-[#15130F] text-white flex items-center justify-center text-xs">
+                  →
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* 3 Large Stat Numbers in Serif Type */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12 pt-12 border-t border-[#F7F4ED]/15">
+            <div>
+              <p className="font-serif text-4xl sm:text-6xl text-[#F7F4ED] font-normal tracking-tight">
+                Since 2022
+              </p>
+              <p className="mt-3 text-xs sm:text-sm text-[#F7F4ED]/70 leading-relaxed max-w-sm">
+                Built with a mission to simplify résumé creation using intelligent
+                automation and human-tested templates.
+              </p>
+            </div>
+
+            <div>
+              <p className="font-serif text-4xl sm:text-6xl text-[#F7F4ED] font-normal tracking-tight">
+                100,000+
+              </p>
+              <p className="mt-3 text-xs sm:text-sm text-[#F7F4ED]/70 leading-relaxed max-w-sm">
+                Hundreds of thousands of personalized résumés crafted across roles,
+                industries and career levels.
+              </p>
+            </div>
+
+            <div>
+              <p className="font-serif text-4xl sm:text-6xl text-[#F7F4ED] font-normal tracking-tight">
+                95%
+              </p>
+              <p className="mt-3 text-xs sm:text-sm text-[#F7F4ED]/70 leading-relaxed max-w-sm">
+                Most users see improved ATS results and higher interview callbacks within
+                their first month of applying.
+              </p>
+            </div>
+          </div>
+
+          {/* 3 Template Previews Side-by-Side Under Stats */}
+          <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#25211C] p-5 rounded-2xl border border-white/10">
+              <div className="flex items-center justify-between text-xs text-[#F7F4ED]/80 mb-3">
+                <span className="font-semibold">Classic ATS</span>
+                <span className="text-[10px] text-emerald-400">100% Pass rate</span>
+              </div>
+              <div className="bg-white text-slate-900 p-4 rounded-xl text-[10px] space-y-1.5 font-serif select-none pointer-events-none opacity-90">
+                <p className="font-bold text-xs uppercase tracking-wider">Aria Bennett</p>
+                <p className="text-[9px] text-slate-600">San Francisco, CA · aria@bennett.dev</p>
+                <div className="border-b border-slate-300 my-1"></div>
+                <p className="font-bold text-[9px] uppercase">Experience</p>
+                <p className="font-semibold text-[9px]">Senior Product Manager — Apex</p>
+                <p className="text-[8px] text-slate-700 leading-tight">
+                  • Led strategic roadmaps for 4 core platforms, delivering 28% ARR uplift.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-[#25211C] p-5 rounded-2xl border border-white/10">
+              <div className="flex items-center justify-between text-xs text-[#F7F4ED]/80 mb-3">
+                <span className="font-semibold">Executive Elite</span>
+                <span className="text-[10px] text-amber-300">Leadership format</span>
+              </div>
+              <div className="bg-white text-slate-900 p-4 rounded-xl text-[10px] space-y-1.5 select-none pointer-events-none opacity-90">
+                <div className="border-l-2 border-[#15130F] pl-2">
+                  <p className="font-bold text-xs font-serif">Marcus Vance</p>
+                  <p className="text-[9px] text-slate-600">VP of Engineering</p>
+                </div>
+                <div className="bg-slate-50 p-1.5 rounded text-[8px] text-slate-700">
+                  Proven technology executive with 14+ years scaling teams from 20 to 180+.
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-[#25211C] p-5 rounded-2xl border border-white/10">
+              <div className="flex items-center justify-between text-xs text-[#F7F4ED]/80 mb-3">
+                <span className="font-semibold">Modern Tech</span>
+                <span className="text-[10px] text-cyan-400">Developer optimized</span>
+              </div>
+              <div className="bg-white text-slate-900 p-4 rounded-xl text-[10px] space-y-1.5 select-none pointer-events-none opacity-90">
+                <div className="flex justify-between items-center">
+                  <p className="font-bold text-xs">Elena Rostova</p>
+                  <span className="font-mono text-[8px] bg-slate-100 px-1 py-0.5 rounded">github.com</span>
+                </div>
+                <p className="text-[8px] text-slate-600">Full Stack & AI Systems</p>
+                <div className="flex flex-wrap gap-1 mt-1 text-[7px] font-mono">
+                  <span className="bg-slate-100 px-1 rounded">React</span>
+                  <span className="bg-slate-100 px-1 rounded">TypeScript</span>
+                  <span className="bg-slate-100 px-1 rounded">Node.js</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* 6. TEMPLATES & PERSONA / TESTIMONIAL SECTION                 */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          {/* Left Narrative */}
+          <div className="lg:col-span-6 space-y-6">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EFECE3] text-[#15130F] border border-[#15130F]/10">
+              ● Templates
+            </span>
+
+            <h2 className="font-serif text-3xl sm:text-5xl font-normal leading-[1.12] tracking-tight text-[#15130F]">
+              Designed for <span className="italic font-light">real hiring.</span>
+            </h2>
+
+            <p className="text-sm sm:text-base text-[#5C564E] leading-relaxed max-w-prose">
+              Professionally crafted templates that impress recruiters and pass ATS —
+              optimized for clarity, readability and modern hiring standards.
+            </p>
+
+            <div className="space-y-3 pt-2">
+              <div className="flex items-start gap-3">
+                <span className="w-5 h-5 rounded-full bg-[#3D4A2E] text-white flex items-center justify-center text-xs shrink-0 mt-0.5">
+                  ✓
+                </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-[#15130F]">
+                    Modern & clean layouts
+                  </h4>
+                  <p className="text-xs text-[#5C564E] mt-0.5">
+                    Minimal, well-structured designs that highlight your skills and experience clearly.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <span className="w-5 h-5 rounded-full bg-[#3D4A2E] text-white flex items-center justify-center text-xs shrink-0 mt-0.5">
+                  ✓
+                </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-[#15130F]">
+                    100% ATS-compatible formats
+                  </h4>
+                  <p className="text-xs text-[#5C564E] mt-0.5">
+                    All templates are tested to work seamlessly with Applicant Tracking Systems without missing tokens.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <Link
+                to="/templates"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#15130F] text-[#F7F4ED] hover:bg-[#2A1F18] font-medium text-sm transition-all duration-200"
+              >
+                <span>View all templates</span>
+                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                  →
+                </span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Portrait & Quote */}
+          <div className="lg:col-span-6">
+            <div className="relative rounded-3xl overflow-hidden border border-[#15130F]/15 shadow-sm max-w-md mx-auto">
+              <img
+                src="/testimonial-portrait.jpg"
+                alt="Professional hiring testimonial"
+                className="w-full h-[440px] sm:h-[480px] object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 sm:p-8 text-white">
+                <p className="font-serif italic text-base sm:text-lg leading-relaxed text-white/95 mb-3">
+                  "CareerCraft helped me rewrite my bullet points with hard metrics. I received 4 interview callbacks within 10 days of applying."
+                </p>
+                <div className="flex items-center justify-between pt-3 border-t border-white/20">
+                  <div>
+                    <p className="text-xs sm:text-sm font-semibold text-white">Maya Lin</p>
+                    <p className="text-[11px] text-white/80">Senior Product Manager at FinTech</p>
+                  </div>
+                  <span className="text-[11px] bg-white/20 px-2.5 py-1 rounded-full text-white backdrop-blur-sm">
+                    Verified hire
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* 7. FAQ ACCORDION SECTION (Hairline dividers, no cards)       */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      <section id="faq" className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[#15130F]/10">
+        <div className="text-left mb-12 sm:mb-16">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EFECE3] text-[#15130F] border border-[#15130F]/10 mb-4">
+            ● FAQ
+          </span>
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal leading-[1.12] tracking-tight text-[#15130F]">
+            Frequently asked <span className="italic font-light">questions.</span>
+          </h2>
+        </div>
+
+        {/* Minimal Accordion with Hairline Dividers */}
+        <div className="border-t border-[#15130F]/15">
+          {faqs.map((faq, index) => {
+            const isOpen = openFaq === index;
+            return (
+              <div key={index} className="border-b border-[#15130F]/15">
                 <button
                   type="button"
-                  onClick={() => setOpenFaq(isOpen ? -1 : idx)}
-                  className="w-full p-5 text-left flex items-center justify-between text-sm font-bold text-slate-900 hover:text-[#7B61FF] transition"
+                  onClick={() => toggleFaq(index)}
+                  className="w-full py-5 sm:py-6 flex items-center justify-between text-left gap-4 hover:opacity-85 transition"
                 >
-                  <span>{faq.q}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 shrink-0 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180 text-[#7B61FF]' : 'text-slate-400'
-                    }`}
-                  />
+                  <span className="font-serif text-lg sm:text-xl font-normal text-[#15130F]">
+                    {faq.q}
+                  </span>
+                  <span className="w-7 h-7 rounded-full bg-[#EFECE3] text-[#15130F] flex items-center justify-center text-xs shrink-0">
+                    {isOpen ? '−' : '+'}
+                  </span>
                 </button>
-
                 {isOpen && (
-                  <div className="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <div className="pb-6 pr-6 text-xs sm:text-sm text-[#5C564E] leading-relaxed max-w-2xl font-sans">
                     {faq.a}
                   </div>
                 )}
@@ -502,33 +774,37 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* 6. Ready when you are (CTA Banner) */}
-      <section id="cta" className="max-w-4xl mx-auto px-4 relative z-10 reveal-mask-in">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#F3F0FF] via-[#EAE5FE] to-[#E5F3FE] border border-[#d7cffe] text-center space-y-6 shadow-card hover:shadow-card-hover card-interactive relative overflow-hidden text-slate-900">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/90 text-[#7B61FF] text-xs font-bold border border-[#d7cffe] shadow-xs">
-            <Award className="w-3.5 h-3.5" /> Ready when you are
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-            Build the resume that gets past the bot first.
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* 8. BOTTOM HERO CTA BANNER                                    */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      <section className="bg-[#FAF8F3] border-t border-[#15130F]/10 py-20 sm:py-24 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-[#D8C9A8] text-[#15130F] mb-6">
+            ✦ Start crafting today
+          </span>
+          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal leading-[1.1] tracking-tight text-[#15130F]">
+            Ready to stand out <br />
+            <span className="italic font-light">with confidence?</span>
           </h2>
-
-          <p className="text-sm sm:text-base text-slate-600 max-w-lg mx-auto leading-relaxed">
-            Set up your first draft in under 10 minutes, scan it against a real job post, and export a clean, parser-safe PDF.
+          <p className="mt-4 text-sm sm:text-base text-[#5C564E] max-w-xl mx-auto leading-relaxed">
+            Join thousands of professionals creating interview-winning résumés in minutes.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 pt-2">
-            <Link
-              to="/builder"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-white bg-[#7B61FF] hover:bg-[#6B4FE0] shadow-md hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={handleStartCTA}
+              className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-[#15130F] text-[#F7F4ED] hover:bg-[#2A1F18] font-medium text-sm transition-all duration-200"
             >
-              Start for free
-            </Link>
+              <span>Start free trial</span>
+              <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                →
+              </span>
+            </button>
             <Link
-              to="/pricing"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200/90 shadow-xs hover:shadow-md hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+              to="/templates"
+              className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full border border-[#15130F]/20 text-[#15130F] hover:bg-[#15130F]/5 font-medium text-sm transition"
             >
-              Compare plans
+              <span>Explore templates</span>
             </Link>
           </div>
         </div>

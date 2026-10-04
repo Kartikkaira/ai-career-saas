@@ -68,46 +68,46 @@ export const UpgradeModal = () => {
     <Modal
       isOpen={upgradeModalOpen}
       onClose={closeUpgradeModal}
-      title={isPremium ? 'Your Pro Membership' : 'Upgrade to CareerCraft Pro'}
+      title={isPremium ? 'Your Pro membership' : 'Upgrade to CareerCraft Pro'}
       maxWidth="max-w-2xl"
     >
       {isPremium ? (
-        /* When user is already a PRO member */
-        <div className="space-y-6 text-center py-4">
-          <div className="w-16 h-16 rounded-3xl bg-[#F3F0FF] border border-[#d7cffe] text-[#7B61FF] flex items-center justify-center mx-auto shadow-sm">
-            <Crown className="w-8 h-8" />
+        /* Active Pro Member View */
+        <div className="space-y-6 text-center py-4 text-[#15130F]">
+          <div className="w-16 h-16 rounded-full bg-[#3D4A2E] text-white flex items-center justify-center mx-auto shadow-xs text-xl">
+            ✦
           </div>
 
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D4A2E] text-white text-xs font-medium">
               <CheckCircle2 className="w-3.5 h-3.5" /> PRO MEMBERSHIP ACTIVE
-            </div>
-            <h2 className="text-2xl font-extrabold text-slate-900">
-              You're an Active Pro Member!
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#15130F]">
+              You're an active Pro member!
             </h2>
-            <p className="text-sm text-slate-600 max-w-md mx-auto">
-              You have full, unlimited access to all AI resume features, premium ATS templates, and deep job-matching analyses.
+            <p className="text-xs sm:text-sm text-[#5C564E] max-w-md mx-auto">
+              You have full, unlimited access to all AI résumé features, premium ATS templates, and deep job-matching analyses.
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-3 max-w-lg mx-auto shadow-xs">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Active Pro Privileges:</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+          <div className="p-5 rounded-2xl bg-[#EFECE3]/70 border border-[#15130F]/10 text-left space-y-3 max-w-lg mx-auto">
+            <h4 className="text-xs font-semibold text-[#15130F]">Active Pro privileges:</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#5C564E]">
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF]" />
-                <span>Unlimited Resumes</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E]" />
+                <span>Unlimited résumés</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF]" />
-                <span>Unlimited ATS Scans</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E]" />
+                <span>Unlimited ATS scans</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF]" />
-                <span>Tech & Executive Templates</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E]" />
+                <span>Tech & executive templates</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF]" />
-                <span>Google X-Y-Z AI Enhancer</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E]" />
+                <span>Google X-Y-Z AI enhancer</span>
               </div>
             </div>
           </div>
@@ -116,35 +116,34 @@ export const UpgradeModal = () => {
             <button
               type="button"
               onClick={closeUpgradeModal}
-              className="px-8 py-3.5 bg-[#7B61FF] hover:bg-[#6B4FE0] text-white rounded-2xl font-bold text-sm shadow-md hover:shadow-lg transition w-full sm:w-auto"
+              className="px-7 py-3 bg-[#15130F] hover:bg-[#2A1F18] text-[#F7F4ED] rounded-full font-medium text-xs transition w-full sm:w-auto"
             >
-              Continue Building
+              Continue building
             </button>
             <button
               type="button"
               disabled={isLoading}
               onClick={handleResetToFree}
-              className="px-5 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-semibold text-xs border border-slate-300 transition w-full sm:w-auto flex items-center justify-center gap-1.5"
+              className="px-5 py-3 bg-white hover:bg-[#FAF8F3] text-[#15130F] rounded-full font-medium text-xs border border-[#15130F]/15 transition w-full sm:w-auto flex items-center justify-center gap-1.5"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset to Free (Test Stripe)</span>
+              <span>Reset to free (test)</span>
             </button>
           </div>
         </div>
       ) : (
-        /* When user is on FREE tier */
-        <div className="space-y-6">
-          {/* Header Hero */}
+        /* Free Tier Upgrade View */
+        <div className="space-y-6 text-[#15130F]">
+          {/* Header */}
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3F0FF] border border-[#d7cffe] text-[#7B61FF] text-xs font-bold shadow-xs">
-              <Crown className="w-3.5 h-3.5" />
-              AFFORDABLE PRO ATS ACCESS & AI INTELLIGENCE
-            </div>
-            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              Supercharge Your Job Search & Land 3x More Interviews
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFECE3] text-[#15130F] text-xs font-semibold">
+              ✦ Unlock full ATS intelligence
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#15130F]">
+              Supercharge your job search & land more interviews
             </h2>
-            <p className="text-sm text-slate-600 max-w-lg mx-auto">
-              Upgrade to Pro for unlimited resumes, keyword gap matchers, and priority Gemini AI bullet point generation.
+            <p className="text-xs sm:text-sm text-[#5C564E] max-w-lg mx-auto">
+              Upgrade to Pro for unlimited résumés, keyword gap matchers, and priority Gemini AI bullet point generation.
             </p>
           </div>
 
@@ -153,104 +152,103 @@ export const UpgradeModal = () => {
             {/* Monthly Plan */}
             <div
               onClick={() => setSelectedPlan('pro_monthly')}
-              className={`p-5 rounded-2xl border cursor-pointer transition-all duration-200 ${
+              className={`p-5 rounded-2xl border cursor-pointer transition-all ${
                 selectedPlan === 'pro_monthly'
-                  ? 'bg-[#F3F0FF]/80 border-[#7B61FF] shadow-sm'
-                  : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                  ? 'bg-white border-[#15130F] shadow-sm'
+                  : 'bg-[#EFECE3]/50 border-[#15130F]/10 hover:border-[#15130F]/30'
               }`}
             >
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-bold text-slate-900">Pro Monthly</span>
-                <span className="text-xs px-2 py-0.5 rounded bg-white text-[#7B61FF] border border-[#d7cffe] font-mono font-semibold">
-                  Monthly Billing
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-serif font-normal text-[#15130F]">Pro monthly</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#EFECE3] text-[#5C564E]">
+                  Monthly
                 </span>
               </div>
-              <div className="flex items-baseline gap-1 mb-3">
-                <span className="text-3xl font-extrabold text-slate-900">₹99</span>
-                <span className="text-xs text-slate-500">/ month ($2 USD)</span>
+              <div className="flex items-baseline gap-1 mb-2">
+                <span className="font-serif text-3xl font-normal text-[#15130F]">₹99</span>
+                <span className="text-xs text-[#5C564E]">/ month ($2 USD)</span>
               </div>
-              <p className="text-xs text-slate-500">Cancel anytime. Instant access.</p>
+              <p className="text-xs text-[#5C564E]">Cancel anytime in one click.</p>
             </div>
 
             {/* Annual Plan */}
             <div
               onClick={() => setSelectedPlan('pro_annual')}
-              className={`relative p-5 rounded-2xl border cursor-pointer transition-all duration-200 ${
+              className={`relative p-5 rounded-2xl border cursor-pointer transition-all ${
                 selectedPlan === 'pro_annual'
-                  ? 'bg-[#F3F0FF]/80 border-[#7B61FF] shadow-sm'
-                  : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                  ? 'bg-white border-[#15130F] shadow-sm'
+                  : 'bg-[#EFECE3]/50 border-[#15130F]/10 hover:border-[#15130F]/30'
               }`}
             >
-              <div className="absolute -top-2.5 right-4 bg-[#7B61FF] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                Save 41% (Best Value)
+              <div className="absolute -top-2.5 right-4 bg-[#B8571E] text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full">
+                Save 41%
               </div>
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-bold text-slate-900">Pro Annual</span>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-serif font-normal text-[#15130F]">Pro annual</span>
               </div>
-              <div className="flex items-baseline gap-1 mb-3">
-                <span className="text-3xl font-extrabold text-[#7B61FF]">₹699</span>
-                <span className="text-xs text-slate-500">/ year ($9 USD · ₹58/mo)</span>
+              <div className="flex items-baseline gap-1 mb-2">
+                <span className="font-serif text-3xl font-normal text-[#15130F]">₹699</span>
+                <span className="text-xs text-[#5C564E]">/ year (₹58/mo)</span>
               </div>
-              <p className="text-xs text-slate-500">Billed annually. Best value for active job seekers.</p>
+              <p className="text-xs text-[#5C564E]">Billed annually. Best value for active job seekers.</p>
             </div>
           </div>
 
           {/* Feature List */}
-          <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3 shadow-xs">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">What's Included in Pro:</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
+          <div className="bg-white rounded-2xl p-5 border border-[#15130F]/10 space-y-3">
+            <h4 className="text-xs font-semibold text-[#15130F]">What's included in Pro:</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-[#5C564E]">
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Unlimited ATS-Optimized Resumes</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E] shrink-0" />
+                <span>Unlimited ATS-optimized résumés</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Unlimited PDF Resume ATS Analyses</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E] shrink-0" />
+                <span>Unlimited PDF résumé ATS analyses</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>All 3 ATS-Safe Executive & Tech Templates</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E] shrink-0" />
+                <span>All 3 ATS-safe executive templates</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Google X-Y-Z AI Bullet Enhancer</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E] shrink-0" />
+                <span>Google X-Y-Z AI bullet enhancer</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Target Job Description Keyword Matcher</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E] shrink-0" />
+                <span>Target job description keyword matcher</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>High-Resolution ATS PDF Export</span>
+                <Check className="w-3.5 h-3.5 text-[#3D4A2E] shrink-0" />
+                <span>High-resolution vector PDF export</span>
               </div>
             </div>
           </div>
 
           {/* Stripe Trust Badge */}
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F3F0FF]/70 border border-[#d7cffe] text-xs text-slate-800">
+          <div className="flex items-center justify-between p-3.5 rounded-full bg-[#EFECE3]/70 border border-[#15130F]/10 text-xs text-[#5C564E]">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#7B61FF] shrink-0" />
-              <span className="font-semibold">Payments powered by Stripe Checkout</span>
+              <ShieldCheck className="w-4 h-4 text-[#3D4A2E] shrink-0" />
+              <span className="font-medium text-[#15130F]">Payments powered by Stripe Checkout</span>
             </div>
-            <span className="text-[11px] text-slate-500 font-medium">Global Cards & 256-Bit SSL</span>
+            <span className="text-[11px] font-mono">256-Bit SSL</span>
           </div>
 
-          {/* Action Buttons */}
-          <div className="space-y-3 pt-1">
-            {/* Primary Action Button - Opens Stripe */}
+          {/* Action Button */}
+          <div className="pt-2">
             <button
               type="button"
               disabled={isLoading}
               onClick={() => handleStripeCheckout(selectedPlan)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl font-extrabold text-white bg-[#7B61FF] hover:bg-[#6B4FE0] shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 transition-all text-sm cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-full font-semibold text-[#F7F4ED] bg-[#15130F] hover:bg-[#2A1F18] shadow-xs active:scale-98 disabled:opacity-50 transition-all text-xs cursor-pointer"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
-                  <CreditCard className="w-4 h-4 text-indigo-200" />
+                  <CreditCard className="w-4 h-4" />
                   <span>Pay ₹{selectedPlan === 'pro_annual' ? '699' : '99'} with Stripe</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>→</span>
                 </>
               )}
             </button>

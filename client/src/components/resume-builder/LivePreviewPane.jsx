@@ -13,11 +13,11 @@ import {
   ZoomIn,
   ZoomOut,
   Save,
-  Sparkles,
 } from 'lucide-react';
 
 export const LivePreviewPane = () => {
-  const { currentResume, activeTemplate, setActiveTemplate, saveCurrentResume, isSaving } = useResumeStore();
+  const { currentResume, activeTemplate, setActiveTemplate, saveCurrentResume, isSaving } =
+    useResumeStore();
   const { user } = useAuthStore();
   const { openUpgradeModal, addToast } = useUiStore();
   const [scale, setScale] = useState(0.85);
@@ -34,35 +34,37 @@ export const LivePreviewPane = () => {
   };
 
   const handleExportPdf = async () => {
-    addToast('Generating ATS-compliant PDF...', 'info');
+    addToast('Generating ATS-compliant vector PDF...', 'info');
     await exportResumeAsPdf('resume-printable-area', `${currentResume.title || 'ATS_Resume'}.pdf`);
     addToast('PDF downloaded successfully!', 'success');
   };
 
   return (
-    <div className="flex flex-col h-full bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+    <div className="flex flex-col h-full bg-[#FAF8F3] border border-[#15130F]/15 rounded-3xl overflow-hidden shadow-xs">
       {/* Top Controls Toolbar */}
-      <div className="p-3 bg-white border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+      <div className="p-3 bg-[#FAF8F3] border-b border-[#15130F]/10 flex flex-wrap items-center justify-between gap-3">
         {/* Template Selector Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           {RESUME_TEMPLATES.map((tpl) => {
-            const isSelected = activeTemplate === tpl.id || (tpl.id === 'standard-ats' && activeTemplate === 'classic-ats');
+            const isSelected =
+              activeTemplate === tpl.id ||
+              (tpl.id === 'standard-ats' && activeTemplate === 'classic-ats');
             return (
               <button
                 key={tpl.id}
                 type="button"
                 onClick={() => handleSelectTemplate(tpl)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
                   isSelected
-                    ? 'bg-[#0f172a] text-white shadow-xs'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                    ? 'bg-[#15130F] text-[#F7F4ED] font-semibold'
+                    : 'bg-white hover:bg-[#EFECE3] text-[#15130F] border border-[#15130F]/10'
                 }`}
               >
                 <span>{tpl.name}</span>
                 {tpl.isPremium && !isPremium ? (
-                  <Crown className="w-3 h-3 text-amber-500" />
+                  <Crown className="w-3 h-3 text-amber-600" />
                 ) : isSelected ? (
-                  <Check className="w-3 h-3 text-indigo-300" />
+                  <Check className="w-3 h-3 text-amber-300" />
                 ) : null}
               </button>
             );
@@ -72,23 +74,23 @@ export const LivePreviewPane = () => {
         {/* Action buttons (Zoom, Save, Export) */}
         <div className="flex items-center gap-2">
           {/* Zoom controls */}
-          <div className="hidden sm:flex items-center gap-1 bg-slate-100 border border-slate-200 rounded-xl p-1 text-slate-600">
+          <div className="hidden sm:flex items-center gap-1 bg-white border border-[#15130F]/10 rounded-full px-2 py-1 text-[#15130F]">
             <button
               type="button"
               onClick={() => setScale((s) => Math.max(0.6, s - 0.1))}
-              className="p-1 hover:text-slate-900"
-              title="Zoom Out"
+              className="p-0.5 hover:text-black"
+              title="Zoom out"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
-            <span className="text-[11px] font-mono font-medium px-1 text-slate-700">
+            <span className="text-[11px] font-mono px-1">
               {Math.round(scale * 100)}%
             </span>
             <button
               type="button"
               onClick={() => setScale((s) => Math.min(1.2, s + 0.1))}
-              className="p-1 hover:text-slate-900"
-              title="Zoom In"
+              className="p-0.5 hover:text-black"
+              title="Zoom in"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
@@ -98,35 +100,35 @@ export const LivePreviewPane = () => {
             type="button"
             disabled={isSaving}
             onClick={saveCurrentResume}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-[#15130F] bg-white border border-[#15130F]/15 hover:bg-[#EFECE3] transition"
           >
-            <Save className="w-3.5 h-3.5 text-[#4f46e5]" />
+            <Save className="w-3 h-3 text-[#3D4A2E]" />
             <span>{isSaving ? 'Saving...' : 'Save'}</span>
           </button>
 
           <button
             type="button"
             onClick={printResumeDirectly}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-[#15130F] bg-white border border-[#15130F]/15 hover:bg-[#EFECE3] transition"
             title="Print ATS Vector Resume"
           >
-            <Printer className="w-3.5 h-3.5" />
+            <Printer className="w-3 h-3" />
             <span>Print</span>
           </button>
 
           <button
             type="button"
             onClick={handleExportPdf}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-[#0f172a] hover:bg-slate-800 shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium text-[#F7F4ED] bg-[#15130F] hover:bg-[#2A1F18] shadow-xs transition active:scale-95"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3 h-3" />
             <span>Export PDF</span>
           </button>
         </div>
       </div>
 
       {/* Preview Viewport */}
-      <div className="flex-1 overflow-auto p-4 sm:p-8 bg-slate-100/70 flex justify-center items-start">
+      <div className="flex-1 overflow-auto p-4 sm:p-8 bg-[#EFECE3]/50 flex justify-center items-start">
         <div
           style={{
             transform: `scale(${scale})`,
@@ -135,7 +137,7 @@ export const LivePreviewPane = () => {
             width: '210mm', // standard A4 width
             minHeight: '297mm',
           }}
-          className="shadow-xl rounded-sm"
+          className="shadow-md rounded-sm bg-white"
         >
           <TemplateRenderer data={currentResume} templateId={activeTemplate} />
         </div>

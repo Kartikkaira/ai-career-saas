@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useUiStore } from '../store/uiStore';
 import { useAuthStore } from '../store/authStore';
 import { subscriptionApi } from '../services/subscriptionApi';
-import { useScrollReveal } from '../hooks/useScrollReveal';
 import confetti from 'canvas-confetti';
-import { Badge } from '../components/common/Badge';
 import {
   Check,
   X,
@@ -15,6 +13,8 @@ import {
   ArrowRight,
   CheckCircle2,
   CreditCard,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 export const PricingPage = () => {
@@ -22,9 +22,7 @@ export const PricingPage = () => {
   const { isAuthenticated, user, updateUserPlan } = useAuthStore();
   const [billingCycle, setBillingCycle] = useState('monthly');
   const [isLoading, setIsLoading] = useState(false);
-
-  // Activate scroll reveals
-  useScrollReveal();
+  const [openFaq, setOpenFaq] = useState(0);
 
   // Handle return from Stripe Checkout
   useEffect(() => {
@@ -99,265 +97,300 @@ export const PricingPage = () => {
     }
   };
 
+  const faqs = [
+    {
+      q: 'Why are these résumé templates guaranteed to be ATS compatible?',
+      a: 'Automated tracking platforms (Workday, Taleo, Greenhouse, Lever, iCIMS) fail when confronted with multi-column tables, floating text boxes, and complex graphical icon fonts. Our templates use single-stream semantic structure and high-contrast typography designed specifically to parse at 100% fidelity without dropped fields.',
+    },
+    {
+      q: 'How does the Gemini AI bullet rewrite formula work?',
+      a: 'Developed by former Google and top tech recruiters, the formula follows: "Accomplished [X], as measured by [Y], by doing [Z]". CareerCraft automatically reformulates passive, responsibility-focused duties into quantified, high-impact statements that grab human attention within 6 seconds.',
+    },
+    {
+      q: 'Can I cancel my subscription at any time?',
+      a: 'Yes, you can cancel whenever you wish directly from your account settings. You retain uninterrupted access to all Pro features until the end of your billing cycle, and no unexpected charges will ever be made.',
+    },
+    {
+      q: 'Are payments secure?',
+      a: 'All transactions are processed through Stripe with 256-bit encryption. We never store or see your full credit card details.',
+    },
+  ];
+
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 animate-in fade-in duration-200">
-      {/* Active Member Announcement Banner */}
-      {isPremium && (
-        <div className="p-5 rounded-2xl bg-[#F3F0FF] border border-[#d7cffe] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm animate-in slide-in-from-top-2">
-          <div className="flex items-center gap-3 text-center sm:text-left">
-            <div className="w-10 h-10 rounded-xl bg-[#7B61FF] text-white flex items-center justify-center font-bold shrink-0 shadow-xs">
-              <Crown className="w-5 h-5" />
+    <div className="bg-[#F7F4ED] text-[#15130F] min-h-screen pt-28 pb-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Active Member Announcement Banner */}
+        {isPremium && (
+          <div className="p-6 rounded-3xl bg-[#3D4A2E] text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
+            <div className="flex items-center gap-3.5 text-center sm:text-left">
+              <div className="w-10 h-10 rounded-full bg-white/20 text-amber-300 flex items-center justify-center font-bold shrink-0">
+                ✦
+              </div>
+              <div>
+                <h3 className="font-serif text-lg font-normal flex items-center gap-2">
+                  <span>You are an active Pro member</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/20 text-white font-semibold">
+                    ACTIVE
+                  </span>
+                </h3>
+                <p className="text-xs text-white/80 mt-0.5 font-sans">
+                  Unlimited ATS scans, Google Gemini bullet rewrites, and executive templates unlocked.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <span>You are an Active Pro Member</span>
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
-                  ACTIVE
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={openUpgradeModal}
+                className="px-4 py-2 bg-white text-[#15130F] hover:bg-[#FAF8F3] rounded-full text-xs font-semibold shadow-xs transition"
+              >
+                View status
+              </button>
+              <button
+                type="button"
+                disabled={isLoading}
+                onClick={handleResetToFree}
+                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full text-xs font-medium border border-white/20 transition"
+              >
+                Reset to free (test)
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Title & Billing Toggle */}
+        <div className="text-center space-y-4 max-w-2xl mx-auto">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EFECE3] text-[#15130F] border border-[#15130F]/10">
+            ✦ Honest, transparent pricing
+          </span>
+
+          <h1 className="font-serif text-4xl sm:text-6xl font-normal leading-[1.08] tracking-tight text-[#15130F]">
+            Invest in your career, <br />
+            <span className="italic font-light">confidently.</span>
+          </h1>
+
+          <p className="text-sm sm:text-base text-[#5C564E] font-sans leading-relaxed">
+            Land your next career upgrade faster. Zero hidden fees. Cancel anytime in one click.
+          </p>
+
+          {/* Billing Toggle (Pill container) */}
+          <div className="pt-2">
+            <div className="inline-flex items-center gap-1 p-1 bg-[#EFECE3] border border-[#15130F]/10 rounded-full">
+              <button
+                type="button"
+                onClick={() => setBillingCycle('monthly')}
+                className={`px-5 py-2 rounded-full text-xs font-medium transition-all ${
+                  billingCycle === 'monthly'
+                    ? 'bg-[#15130F] text-[#F7F4ED] font-semibold'
+                    : 'text-[#5C564E] hover:text-[#15130F]'
+                }`}
+              >
+                Monthly billing
+              </button>
+              <button
+                type="button"
+                onClick={() => setBillingCycle('annual')}
+                className={`px-5 py-2 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 ${
+                  billingCycle === 'annual'
+                    ? 'bg-[#15130F] text-[#F7F4ED] font-semibold'
+                    : 'text-[#5C564E] hover:text-[#15130F]'
+                }`}
+              >
+                <span>Annual billing</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#B8571E] text-white">
+                  Save 41%
                 </span>
-              </h3>
-              <p className="text-xs text-slate-600">
-                You have full unlimited access to all AI resume features, ATS scans, and executive templates.
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Pricing Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+          {/* Free Plan Card */}
+          <div className="bg-[#FAF8F3] p-8 rounded-3xl border border-[#15130F]/15 flex flex-col justify-between shadow-xs">
+            <div className="space-y-5">
+              <div className="flex justify-between items-center">
+                <h3 className="font-serif text-2xl font-normal text-[#15130F]">Starter Free</h3>
+                <span className="text-[11px] font-medium px-3 py-1 rounded-full bg-[#EFECE3] text-[#5C564E]">
+                  Free forever
+                </span>
+              </div>
+
+              <div className="flex items-baseline gap-1">
+                <span className="font-serif text-5xl font-normal text-[#15130F]">₹0</span>
+                <span className="text-xs text-[#5C564E]">/ month</span>
+              </div>
+
+              <p className="text-xs text-[#5C564E] leading-relaxed">
+                Perfect for exploring ATS compatibility and drafting your initial résumé.
               </p>
+
+              <div className="space-y-3 pt-5 border-t border-[#15130F]/10 text-xs text-[#15130F]">
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-[#3D4A2E] shrink-0" />
+                  <span>1 Saved universal ATS résumé</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-[#3D4A2E] shrink-0" />
+                  <span>2 AI ATS résumé analyses per month</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-[#3D4A2E] shrink-0" />
+                  <span>Universal ATS Minimalist Template</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-[#3D4A2E] shrink-0" />
+                  <span>Standard vector PDF export</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-[#8A8277] line-through">
+                  <X className="w-4 h-4 text-[#8A8277]/60 shrink-0" />
+                  <span>Unlimited résumés & scans</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-[#8A8277] line-through">
+                  <X className="w-4 h-4 text-[#8A8277]/60 shrink-0" />
+                  <span>Executive Elite & Modern Tech templates</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-8">
+              <button
+                type="button"
+                disabled={isPremium}
+                onClick={() => handleSelectPlan('free')}
+                className={`w-full py-3.5 rounded-full text-xs font-medium transition active:scale-98 ${
+                  isPremium
+                    ? 'bg-[#EFECE3] text-[#8A8277] cursor-not-allowed'
+                    : 'text-[#15130F] bg-white hover:bg-[#EFECE3] border border-[#15130F]/20'
+                }`}
+              >
+                {isPremium ? 'Included with Pro' : isAuthenticated ? 'Current free plan' : 'Get started free'}
+              </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={openUpgradeModal}
-              className="px-4 py-2 bg-white text-[#7B61FF] hover:bg-[#F3F0FF] border border-[#d7cffe] rounded-xl text-xs font-bold shadow-xs transition"
-            >
-              View Membership Status
-            </button>
-            <button
-              type="button"
-              disabled={isLoading}
-              onClick={handleResetToFree}
-              className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl text-xs font-semibold transition"
-            >
-              Reset to Free (Test Stripe)
-            </button>
+          {/* Pro Plan Card (Terracotta / Olive Accent) */}
+          <div className="bg-[#15130F] text-[#F7F4ED] p-8 rounded-3xl border border-[#15130F] flex flex-col justify-between shadow-md relative overflow-hidden">
+            <div className="space-y-5">
+              <div className="flex justify-between items-center">
+                <h3 className="font-serif text-2xl font-normal text-[#F7F4ED]">CareerCraft Pro</h3>
+                <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-[#B8571E] text-white">
+                  {isPremium ? 'Active Plan' : 'Most Popular'}
+                </span>
+              </div>
+
+              <div className="flex items-baseline gap-1">
+                <span className="font-serif text-5xl font-normal text-[#F7F4ED]">
+                  {billingCycle === 'annual' ? '₹699' : '₹99'}
+                </span>
+                <span className="text-xs text-[#F7F4ED]/70">
+                  {billingCycle === 'annual' ? '/ year (₹58/mo)' : '/ month ($2 USD)'}
+                </span>
+              </div>
+
+              <p className="text-xs text-[#F7F4ED]/80 leading-relaxed font-sans">
+                Complete ATS intelligence suite for active job seekers seeking maximum callback rates.
+              </p>
+
+              <div className="space-y-3 pt-5 border-t border-[#F7F4ED]/15 text-xs text-[#F7F4ED]/90">
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-amber-300 shrink-0" />
+                  <strong className="text-white">Unlimited ATS-optimized résumés</strong>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-amber-300 shrink-0" />
+                  <strong className="text-white">Unlimited PDF scans & instant scoring</strong>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-amber-300 shrink-0" />
+                  <span>Executive Elite & Modern Tech templates unlocked</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-amber-300 shrink-0" />
+                  <span>Google X-Y-Z bullet point metric rewrite generator</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-amber-300 shrink-0" />
+                  <span>Target job description keyword gap matcher</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-amber-300 shrink-0" />
+                  <span>High-resolution vector PDF downloads (no watermark)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-8">
+              <button
+                type="button"
+                disabled={isPremium || isLoading}
+                onClick={() => handleSelectPlan('pro')}
+                className={`w-full py-3.5 rounded-full text-xs font-semibold flex items-center justify-center gap-2 transition active:scale-98 shadow-sm ${
+                  isPremium
+                    ? 'bg-[#3D4A2E] text-white cursor-default'
+                    : 'bg-[#F7F4ED] text-[#15130F] hover:bg-white'
+                }`}
+              >
+                {isLoading ? (
+                  <div className="w-4 h-4 border-2 border-[#15130F] border-t-transparent rounded-full animate-spin" />
+                ) : isPremium ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>✓ Current active Pro subscription</span>
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-4 h-4" />
+                    <span>Pay {billingCycle === 'annual' ? '₹699' : '₹99'} & upgrade</span>
+                    <span>→</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      )}
 
-      {/* Title & Billing Toggle */}
-      <div className="text-center space-y-4 max-w-2xl mx-auto reveal-fade-up is-revealed">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F3F0FF] border border-[#d7cffe] text-[#7B61FF] text-xs font-bold uppercase tracking-wider shadow-xs">
-          ACCESSIBLE CAREER INVESTMENT
-        </div>
-
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-          Simple, Affordable Plans for Serious Job Seekers
-        </h1>
-
-        <p className="text-sm sm:text-base text-slate-600">
-          Land your next career upgrade faster. Zero hidden fees. Cancel anytime in one click.
-        </p>
-
-        {/* Billing Toggle */}
-        <div className="inline-flex items-center gap-2 p-1.5 bg-white border border-slate-200/90 shadow-card rounded-2xl">
-          <button
-            type="button"
-            onClick={() => setBillingCycle('monthly')}
-            className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 ${
-              billingCycle === 'monthly'
-                ? 'bg-[#7B61FF] text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Monthly Billing
-          </button>
-          <button
-            type="button"
-            onClick={() => setBillingCycle('annual')}
-            className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 flex items-center gap-1.5 ${
-              billingCycle === 'annual'
-                ? 'bg-[#7B61FF] text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <span>Annual (Save 41%)</span>
-            <span className={`px-1.5 py-0.2 rounded text-[10px] font-extrabold ${
-              billingCycle === 'annual' ? 'bg-white/20 text-white' : 'bg-[#F3F0FF] text-[#7B61FF]'
-            }`}>
-              ₹58/MO
+        {/* ──────────────────────────────────────────────────────────── */}
+        {/* FAQ ACCORDION SECTION (Hairline dividers, NO cards)          */}
+        {/* ──────────────────────────────────────────────────────────── */}
+        <div className="max-w-3xl mx-auto pt-12 border-t border-[#15130F]/15">
+          <div className="text-left mb-8">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EFECE3] text-[#15130F] border border-[#15130F]/10 mb-3">
+              ● FAQ
             </span>
-          </button>
-        </div>
-      </div>
-
-      {/* Pricing Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        {/* Free Plan Card */}
-        <div className="bg-white p-8 rounded-3xl border border-slate-200/90 space-y-6 flex flex-col justify-between shadow-card hover:shadow-card-hover card-interactive reveal-scale-in reveal-delay-1">
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-bold text-slate-900">Starter Free</span>
-              <Badge variant="default" size="sm">Free Forever</Badge>
-            </div>
-
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-extrabold text-slate-900">₹0</span>
-              <span className="text-xs text-slate-500">/ month</span>
-            </div>
-
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Perfect for exploring ATS compatibility and drafting your initial resume.
-            </p>
-
-            <div className="space-y-3 pt-4 border-t border-slate-100 text-xs text-slate-700">
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>1 Saved Universal ATS Resume</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>2 AI ATS Resume Analyses / month</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Universal ATS Minimalist Template</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Standard Vector PDF Export</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-slate-400 line-through">
-                <X className="w-4 h-4 text-slate-300 shrink-0" />
-                <span>Unlimited Resumes & Scans</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-slate-400 line-through">
-                <X className="w-4 h-4 text-slate-300 shrink-0" />
-                <span>Tech Specialist & Executive Templates</span>
-              </div>
-            </div>
+            <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#15130F]">
+              Frequently asked <span className="italic font-light">questions.</span>
+            </h3>
           </div>
 
-          <button
-            type="button"
-            disabled={isPremium}
-            onClick={() => handleSelectPlan('free')}
-            className={`w-full py-3.5 rounded-2xl text-xs font-semibold transition-all duration-200 active:scale-[0.98] ${
-              isPremium
-                ? 'bg-slate-50 text-slate-400 cursor-not-allowed border border-slate-200'
-                : 'text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-950 border border-slate-200 shadow-xs'
-            }`}
-          >
-            {isPremium ? 'Included with Your Pro Access' : isAuthenticated ? 'Current Free Tier' : 'Get Started Free'}
-          </button>
-        </div>
-
-        {/* Pro Plan Card */}
-        <div className={`bg-white p-8 rounded-3xl border-2 space-y-6 flex flex-col justify-between relative overflow-hidden shadow-card hover:shadow-card-hover card-interactive reveal-scale-in reveal-delay-2 ${
-          isPremium ? 'border-emerald-500 shadow-emerald-500/10' : 'border-[#7B61FF] shadow-[#7B61FF]/10'
-        }`}>
-          <div className="absolute top-4 right-4">
-            <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-xs ${
-              isPremium ? 'bg-emerald-100 text-emerald-800' : 'bg-[#F3F0FF] text-[#7B61FF] border border-[#d7cffe]'
-            }`}>
-              {isPremium ? 'Active Plan' : 'Most Popular'}
-            </span>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Crown className={`w-5 h-5 ${isPremium ? 'text-emerald-600' : 'text-[#7B61FF]'}`} />
-              <span className="text-lg font-bold text-slate-900">CareerCraft Pro</span>
-            </div>
-
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-extrabold text-slate-900">
-                {billingCycle === 'annual' ? '₹699' : '₹99'}
-              </span>
-              <span className="text-xs text-slate-500">
-                {billingCycle === 'annual' ? '/ year ($9 USD · ₹58/mo)' : '/ month ($2 USD)'}
-              </span>
-            </div>
-
-            <p className="text-xs text-slate-600 leading-relaxed font-medium">
-              Complete ATS intelligence suite for active job candidates seeking maximum interview callbacks.
-            </p>
-
-            <div className="space-y-3 pt-4 border-t border-slate-100 text-xs text-slate-800">
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <strong className="text-slate-950">Unlimited ATS-Optimized Resumes</strong>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <strong className="text-slate-950">Unlimited PDF Resume Analyses & Scoring</strong>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Tech & Engineering Specialist & Executive Templates</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Google X-Y-Z Bullet Point Quantifier</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Target Job Description Keyword Gap Matcher</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>High-Resolution Crisp Vector PDF Download</span>
-              </div>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            disabled={isPremium || isLoading}
-            onClick={() => handleSelectPlan('pro')}
-            className={`w-full py-3.5 rounded-2xl text-xs font-bold text-white shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer ${
-              isPremium
-                ? 'bg-emerald-600 hover:bg-emerald-700'
-                : 'bg-[#7B61FF] hover:bg-[#6B4FE0]'
-            }`}
-          >
-            {isLoading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : isPremium ? (
-              <>
-                <CheckCircle2 className="w-4 h-4" />
-                <span>✓ Your Current Active Plan (Pro)</span>
-              </>
-            ) : (
-              <>
-                <CreditCard className="w-4 h-4 text-indigo-200" />
-                <span>Pay {billingCycle === 'annual' ? '₹699' : '₹99'} & Upgrade with Stripe</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* FAQ Section */}
-      <div className="max-w-3xl mx-auto space-y-6 pt-10 border-t border-slate-200/80 reveal-fade-up is-revealed">
-        <h3 className="text-xl font-bold text-slate-900 text-center">Frequently Asked Questions</h3>
-
-        <div className="space-y-4 text-xs sm:text-sm text-slate-700">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 space-y-1.5 shadow-card hover:shadow-card-hover card-interactive">
-            <h4 className="font-bold text-slate-900">Why are these resume templates ATS safe?</h4>
-            <p className="text-slate-600 leading-relaxed">
-              Standard ATS parsers (like Workday, Taleo, Greenhouse, and Lever) fail on multi-column tables, graphics, and custom icon fonts. Our templates use single-column semantics and high-contrast typography designed specifically to parse at 100% fidelity.
-            </p>
-          </div>
-
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 space-y-1.5 shadow-card hover:shadow-card-hover card-interactive">
-            <h4 className="font-bold text-slate-900">How does the Google X-Y-Z formula work?</h4>
-            <p className="text-slate-600 leading-relaxed">
-              Created by former Google recruiters, the X-Y-Z formula states: "Accomplished [X] as measured by [Y], by doing [Z]". Our Gemini AI automatically restructures your draft sentences to follow this exact format with numbers and active verbs.
-            </p>
-          </div>
-
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 space-y-1.5 shadow-card hover:shadow-card-hover card-interactive">
-            <h4 className="font-bold text-slate-900">Can I cancel anytime?</h4>
-            <p className="text-slate-600 leading-relaxed">
-              Yes, you can cancel your subscription at any time. You will continue to have full access until the end of your billing cycle.
-            </p>
+          {/* Simple Accordion with Hairline Dividers */}
+          <div className="border-t border-[#15130F]/15">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div key={index} className="border-b border-[#15130F]/15">
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(isOpen ? -1 : index)}
+                    className="w-full py-5 flex items-center justify-between text-left gap-4 hover:opacity-85 transition"
+                  >
+                    <span className="font-serif text-lg font-normal text-[#15130F]">
+                      {faq.q}
+                    </span>
+                    <span className="w-6 h-6 rounded-full bg-[#EFECE3] text-[#15130F] flex items-center justify-center text-xs shrink-0">
+                      {isOpen ? '−' : '+'}
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="pb-5 text-xs sm:text-sm text-[#5C564E] leading-relaxed font-sans max-w-2xl">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

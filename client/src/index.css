@@ -2,19 +2,102 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-cream: #F7F4ED;
+  --color-cream-light: #FAF8F3;
+  --color-ink: #15130F;
+  --color-ink-soft: #25211C;
+  --color-ink-muted: #5C564E;
+  --color-olive: #3D4A2E;
+  --color-terracotta: #B8571E;
+  --color-sand: #D8C9A8;
+  --color-navy: #2E3A4F;
+  --color-espresso: #2A1F18;
+  --border-hairline: rgba(21, 19, 15, 0.12);
+  --border-hairline-dark: rgba(247, 244, 237, 0.15);
+}
+
 @layer base {
   * {
-    border-color: #e2e8f0;
+    border-color: rgba(21, 19, 15, 0.12);
   }
   body {
-    background-color: #F8F8FB;
-    color: #0F172A;
+    background-color: #F7F4ED;
+    color: #15130F;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
   ::selection {
-    background-color: #7B61FF;
-    color: #ffffff;
+    background-color: #15130F;
+    color: #F7F4ED;
   }
+}
+
+/* Editorial Serif & Typography Utilities */
+.font-serif-headline {
+  font-family: 'Fraunces', 'Canela', 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.025em;
+  font-optical-sizing: auto;
+}
+
+.font-serif-italic {
+  font-family: 'Fraunces', 'Canela', 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Flat Panel Utilities (No soft shadows or gradient overlays) */
+.flat-panel-olive {
+  background-color: #3D4A2E;
+  color: #FFFFFF;
+}
+
+.flat-panel-terracotta {
+  background-color: #B8571E;
+  color: #FFFFFF;
+}
+
+.flat-panel-sand {
+  background-color: #D8C9A8;
+  color: #15130F;
+}
+
+.flat-panel-navy {
+  background-color: #2E3A4F;
+  color: #FFFFFF;
+}
+
+.flat-panel-espresso {
+  background-color: #2A1F18;
+  color: #F7F4ED;
+}
+
+.flat-panel-ink {
+  background-color: #15130F;
+  color: #F7F4ED;
+}
+
+.flat-panel-cream {
+  background-color: #F7F4ED;
+  color: #15130F;
+}
+
+.hairline-b {
+  border-bottom: 1px solid rgba(21, 19, 15, 0.1);
+}
+
+.hairline-t {
+  border-top: 1px solid rgba(21, 19, 15, 0.1);
+}
+
+.hairline-light-t {
+  border-top: 1px solid rgba(247, 244, 237, 0.12);
+}
+
+.hairline-light-b {
+  border-bottom: 1px solid rgba(247, 244, 237, 0.12);
 }
 
 /* Custom Scrollbar - Clean Modern Light */

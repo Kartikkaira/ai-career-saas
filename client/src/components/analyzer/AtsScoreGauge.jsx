@@ -1,116 +1,120 @@
 import React from 'react';
 import { ShieldCheck, AlertTriangle, AlertCircle, Sparkles } from 'lucide-react';
 
-export const AtsScoreGauge = ({ score = 0, executiveSummary = '' }) => {
+export const AtsScoreGauge = ({ score = 0, executiveSummary = '', roleName = 'Target Position' }) => {
   const getScoreInfo = (s) => {
     if (s >= 85) {
       return {
         label: 'Exceptional (Top 5%)',
-        color: 'text-[#4f46e5]',
-        stroke: '#4f46e5',
-        bg: 'bg-[#eef2ff] border-indigo-100',
-        icon: ShieldCheck,
-        verdict: 'High chance of passing Tier-1 enterprise ATS filters (Workday, Taleo, Greenhouse).',
+        accentColor: '#3D4A2E',
+        barColor: 'bg-[#3D4A2E]',
+        badgeBg: 'bg-[#3D4A2E] text-white',
+        grade: 'A+',
+        verdict: 'High probability of passing Tier-1 enterprise ATS algorithms (Workday, Taleo, Greenhouse).',
       };
     }
     if (s >= 70) {
       return {
         label: 'Competitive Match',
-        color: 'text-[#4f46e5]',
-        stroke: '#4f46e5',
-        bg: 'bg-[#eef2ff] border-indigo-100',
-        icon: Sparkles,
-        verdict: 'Good structure. Fixing missing keywords and quantifying bullets will push you above 85+.',
+        accentColor: '#B8571E',
+        barColor: 'bg-[#B8571E]',
+        badgeBg: 'bg-[#B8571E] text-white',
+        grade: 'B+',
+        verdict: 'Solid foundation. Adding target keywords and quantifying achievements will push you above 90%.',
       };
     }
     if (s >= 55) {
       return {
         label: 'Needs Optimization',
-        color: 'text-amber-700',
-        stroke: '#f59e0b',
-        bg: 'bg-amber-50 border-amber-200',
-        icon: AlertTriangle,
-        verdict: 'At risk of automated ATS rejection due to missing keywords or unquantified achievements.',
+        accentColor: '#B8571E',
+        barColor: 'bg-[#B8571E]',
+        badgeBg: 'bg-[#D8C9A8] text-[#15130F]',
+        grade: 'C',
+        verdict: 'At risk of algorithmic filter rejection due to passive verbs or missing skills keywords.',
       };
     }
     return {
       label: 'Critical Revision Required',
-      color: 'text-rose-700',
-      stroke: '#e11d48',
-      bg: 'bg-rose-50 border-rose-200',
-      icon: AlertCircle,
-      verdict: 'Lacks core keyword density, action verbs, or standard ATS parseable structure.',
+      accentColor: '#2A1F18',
+      barColor: 'bg-[#2A1F18]',
+      badgeBg: 'bg-[#2A1F18] text-[#F7F4ED]',
+      grade: 'D',
+      verdict: 'Lacks standard single-column ATS parseable structure, action verbs, or technical keywords.',
     };
   };
 
   const info = getScoreInfo(score);
-  const Icon = info.icon;
-
-  // SVG Gauge calculations
-  const radius = 70;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(79,70,229,0.06)] flex flex-col md:flex-row items-center gap-6 sm:gap-8">
-      {/* Circular Gauge */}
-      <div className="relative w-44 h-44 shrink-0 flex items-center justify-center">
-        <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
-          {/* Background circle */}
-          <circle
-            cx="80"
-            cy="80"
-            r={radius}
-            fill="transparent"
-            stroke="#eef2ff"
-            strokeWidth="12"
-          />
-          {/* Animated score arc */}
-          <circle
-            cx="80"
-            cy="80"
-            r={radius}
-            fill="transparent"
-            stroke={info.stroke}
-            strokeWidth="12"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            style={{ transition: 'stroke-dashoffset 1.2s ease-in-out' }}
-          />
-        </svg>
-
-        {/* Center Text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <span className="text-4xl font-extrabold text-slate-900 tracking-tight">{score}</span>
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">/ 100 ATS</span>
-        </div>
+    <div className="bg-[#FAF8F3] p-6 sm:p-8 rounded-3xl border border-[#15130F]/10 shadow-xs text-[#15130F]">
+      {/* Pattern from hero: Label top left + badge top right */}
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-xs font-medium text-[#5C564E] font-sans">
+          Résumé score · ATS analysis
+        </span>
+        <span
+          className={`text-[11px] font-semibold px-3 py-1 rounded-full ${info.badgeBg}`}
+        >
+          {info.label}
+        </span>
       </div>
 
-      {/* Details & Verdict */}
-      <div className="space-y-3 flex-1 text-center md:text-left">
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${info.bg} ${info.color}`}>
-            <Icon className="w-3.5 h-3.5" />
-            {info.label}
+      {/* Live Data Row: Target Role on left + Large Serif Score on right */}
+      <div className="flex items-baseline justify-between mb-3">
+        <div>
+          <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#15130F]">
+            {roleName || 'Senior Candidate Draft'}
+          </h3>
+          <p className="text-xs text-[#5C564E] mt-0.5">
+            Calibrated against 12,000+ verified hiring scans
+          </p>
+        </div>
+
+        <div className="text-right">
+          <span className="font-serif text-4xl sm:text-5xl font-normal text-[#15130F]">
+            {score}
           </span>
-          <span className="text-xs text-slate-400 font-mono">Gemini AI Evaluated</span>
+          <span className="font-serif text-2xl font-light text-[#5C564E] ml-1">%</span>
         </div>
-
-        <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-          Overall ATS Compatibility Score
-        </h3>
-
-        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
-          {info.verdict}
-        </p>
-
-        {executiveSummary && (
-          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-700 italic">
-            "{executiveSummary}"
-          </div>
-        )}
       </div>
+
+      {/* Flat Progress Bar (From hero pattern) */}
+      <div className="w-full bg-[#E8E3D7] rounded-full h-2.5 overflow-hidden mb-4">
+        <div
+          className={`${info.barColor} h-2.5 rounded-full transition-all duration-700 ease-out`}
+          style={{ width: `${Math.min(100, Math.max(5, score))}%` }}
+        />
+      </div>
+
+      {/* Bottom Metrics Pill Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-[#15130F]/10 text-xs">
+        <div>
+          <p className="text-[11px] text-[#5C564E]">ATS parse rate</p>
+          <p className="font-serif text-base font-normal text-[#15130F]">{score}/100</p>
+        </div>
+        <div>
+          <p className="text-[11px] text-[#5C564E]">Tone grade</p>
+          <p className="font-serif text-base font-normal text-[#15130F]">{info.grade}</p>
+        </div>
+        <div>
+          <p className="text-[11px] text-[#5C564E]">Recruiter skim</p>
+          <p className="font-serif text-base font-normal text-[#15130F]">
+            {score >= 75 ? 'Pass (<6s)' : 'Flagged'}
+          </p>
+        </div>
+        <div>
+          <p className="text-[11px] text-[#5C564E]">Format index</p>
+          <p className="font-serif text-base font-normal text-[#15130F]">Single-column</p>
+        </div>
+      </div>
+
+      {/* Executive Summary */}
+      {executiveSummary && (
+        <div className="mt-5 p-4 rounded-2xl bg-[#EFECE3]/70 border border-[#15130F]/10 text-xs text-[#25211C] leading-relaxed">
+          <p className="font-semibold text-[#15130F] mb-1 font-serif">Executive summary verdict:</p>
+          <p>{executiveSummary}</p>
+        </div>
+      )}
     </div>
   );
 };

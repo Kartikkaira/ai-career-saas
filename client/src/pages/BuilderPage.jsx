@@ -23,17 +23,20 @@ import {
   ChevronRight,
   Save,
   ArrowLeft,
+  Sparkles,
 } from 'lucide-react';
 
 export const BuilderPage = () => {
   const [searchParams] = useSearchParams();
   const resumeId = searchParams.get('id');
+  const templateParam = searchParams.get('template');
   const navigate = useNavigate();
 
   const {
     currentResume,
     activeStep,
     setActiveStep,
+    setActiveTemplate,
     saveCurrentResume,
     loadResumeById,
     resetCurrentResume,
@@ -45,15 +48,78 @@ export const BuilderPage = () => {
   const { addToast, openUpgradeModal } = useUiStore();
   const [titleEdit, setTitleEdit] = useState('');
 
+  // Step definitions with specific flat color block tokens
   const steps = [
-    { id: 0, name: 'Personal', icon: User },
-    { id: 1, name: 'Summary', icon: FileEdit },
-    { id: 2, name: 'Experience', icon: Briefcase },
-    { id: 3, name: 'Education', icon: GraduationCap },
-    { id: 4, name: 'Skills', icon: Wrench },
-    { id: 5, name: 'Projects', icon: FolderGit2 },
-    { id: 6, name: 'Certs', icon: Award },
+    {
+      id: 0,
+      name: 'Personal',
+      icon: User,
+      title: 'Personal details',
+      subtitle: 'Your name, title, contact info and portfolio link.',
+      panelBg: 'bg-[#3D4A2E] text-white',
+      badge: 'Step 1 of 7 · Olive Panel',
+    },
+    {
+      id: 1,
+      name: 'Summary',
+      icon: FileEdit,
+      title: 'Professional summary',
+      subtitle: 'A high-impact executive summary tailored to your target position.',
+      panelBg: 'bg-[#B8571E] text-white',
+      badge: 'Step 2 of 7 · Terracotta Panel',
+    },
+    {
+      id: 2,
+      name: 'Experience',
+      icon: Briefcase,
+      title: 'Work experience',
+      subtitle: 'Action-oriented bullet points using the Google X-Y-Z formula.',
+      panelBg: 'bg-[#2E3A4F] text-white',
+      badge: 'Step 3 of 7 · Navy Panel',
+    },
+    {
+      id: 3,
+      name: 'Education',
+      icon: GraduationCap,
+      title: 'Education & degrees',
+      subtitle: 'Universities, honors, majors, and academic qualifications.',
+      panelBg: 'bg-[#D8C9A8] text-[#15130F]',
+      badge: 'Step 4 of 7 · Sand Panel',
+    },
+    {
+      id: 4,
+      name: 'Skills',
+      icon: Wrench,
+      title: 'Core & technical skills',
+      subtitle: 'Targeted keywords matched against applicant tracking systems.',
+      panelBg: 'bg-[#3D4A2E] text-white',
+      badge: 'Step 5 of 7 · Olive Panel',
+    },
+    {
+      id: 5,
+      name: 'Projects',
+      icon: FolderGit2,
+      title: 'Key projects & impact',
+      subtitle: 'Showcase real-world apps, client work, or open-source repositories.',
+      panelBg: 'bg-[#B8571E] text-white',
+      badge: 'Step 6 of 7 · Terracotta Panel',
+    },
+    {
+      id: 6,
+      name: 'Certs',
+      icon: Award,
+      title: 'Certifications & licenses',
+      subtitle: 'AWS, PMP, Scrum, CFA or industry-standard accreditations.',
+      panelBg: 'bg-[#2A1F18] text-white',
+      badge: 'Step 7 of 7 · Espresso Panel',
+    },
   ];
+
+  useEffect(() => {
+    if (templateParam) {
+      setActiveTemplate(templateParam);
+    }
+  }, [templateParam]);
 
   useEffect(() => {
     if (resumeId) {
@@ -104,113 +170,137 @@ export const BuilderPage = () => {
     }
   };
 
+  const currentStepData = steps[activeStep] || steps[0];
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => navigate('/dashboard')}
-            className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-slate-900 shadow-xs transition"
-            title="Back to Dashboard"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
+    <div className="bg-[#F7F4ED] text-[#15130F] min-h-screen pt-24 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        {/* Top Header Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#15130F]/10">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate('/dashboard')}
+              className="p-2.5 rounded-full bg-white border border-[#15130F]/15 text-[#15130F] hover:bg-[#FAF8F3] shadow-xs transition"
+              title="Back to Dashboard"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
 
-          <div>
-            <input
-              type="text"
-              value={titleEdit}
-              onChange={(e) => {
-                setTitleEdit(e.target.value);
-                updateTitle(e.target.value);
-              }}
-              placeholder="Resume Title (e.g. Senior Backend Engineer)"
-              className="text-lg sm:text-xl font-extrabold text-slate-900 bg-transparent border-b border-dashed border-slate-300 hover:border-slate-500 focus:border-indigo-600 focus:outline-none transition max-w-sm"
-            />
-            <p className="text-[11px] text-slate-400 mt-0.5">
-              Multi-step ATS builder with real-time live preview
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            disabled={isSaving}
-            onClick={handleSave}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#0f172a] hover:bg-slate-800 shadow-sm disabled:opacity-50 transition"
-          >
-            <Save className="w-4 h-4" />
-            <span>{isSaving ? 'Saving Draft...' : 'Save Draft to Cloud'}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Step Navigation & Form Wizard (5 cols on lg) */}
-        <div className="lg:col-span-5 space-y-4">
-          {/* Step Pill Tabs */}
-          <div className="flex items-center gap-1 overflow-x-auto pb-2 p-1.5 bg-slate-100 border border-slate-200 rounded-2xl">
-            {steps.map((step) => {
-              const Icon = step.icon;
-              const isActive = activeStep === step.id;
-              return (
-                <button
-                  key={step.id}
-                  type="button"
-                  onClick={() => setActiveStep(step.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                    isActive
-                      ? 'bg-white text-[#4f46e5] font-bold shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{step.name}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Section Form Box */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-            {renderActiveStepComponent()}
-
-            {/* Step Wizard Footer (Prev / Next Buttons) */}
-            <div className="flex items-center justify-between pt-6 mt-6 border-t border-slate-100">
-              <button
-                type="button"
-                disabled={activeStep === 0}
-                onClick={() => setActiveStep(activeStep - 1)}
-                className="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 disabled:opacity-30 transition"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Previous Step
-              </button>
-
-              <span className="text-xs text-slate-400 font-mono font-medium">
-                Step {activeStep + 1} of {steps.length}
-              </span>
-
-              <button
-                type="button"
-                disabled={activeStep === steps.length - 1}
-                onClick={() => setActiveStep(activeStep + 1)}
-                className="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#0f172a] hover:bg-slate-800 shadow-sm disabled:opacity-30 transition"
-              >
-                Next Step
-                <ChevronRight className="w-4 h-4" />
-              </button>
+            <div>
+              <input
+                type="text"
+                value={titleEdit}
+                onChange={(e) => {
+                  setTitleEdit(e.target.value);
+                  updateTitle(e.target.value);
+                }}
+                placeholder="Resume title (e.g. Senior Product Manager)"
+                className="text-lg sm:text-xl font-serif text-[#15130F] bg-transparent border-b border-dashed border-[#15130F]/30 hover:border-[#15130F] focus:border-[#15130F] focus:outline-none transition max-w-sm"
+              />
+              <p className="text-[11px] text-[#5C564E] mt-0.5 font-sans">
+                Real-time ATS engine with instant typography rendering
+              </p>
             </div>
           </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={isSaving}
+              onClick={handleSave}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold text-[#F7F4ED] bg-[#15130F] hover:bg-[#2A1F18] shadow-sm disabled:opacity-50 transition active:scale-95"
+            >
+              <Save className="w-3.5 h-3.5" />
+              <span>{isSaving ? 'Saving draft...' : 'Save to cloud'}</span>
+            </button>
+          </div>
         </div>
 
-        {/* Right Column: Live ATS Preview Pane (7 cols on lg) */}
-        <div className="lg:col-span-7 h-[calc(100vh-140px)] min-h-[600px] sticky top-20">
-          <LivePreviewPane />
+        {/* Main Two-Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Step Navigation & Form Wizard (5 cols on lg) */}
+          <div className="lg:col-span-5 space-y-4">
+            {/* Step Pill Tabs */}
+            <div className="flex items-center gap-1 overflow-x-auto pb-1 p-1 bg-[#EFECE3] border border-[#15130F]/10 rounded-full">
+              {steps.map((step) => {
+                const Icon = step.icon;
+                const isActive = activeStep === step.id;
+                return (
+                  <button
+                    key={step.id}
+                    type="button"
+                    onClick={() => setActiveStep(step.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+                      isActive
+                        ? 'bg-[#15130F] text-[#F7F4ED] font-semibold shadow-xs'
+                        : 'text-[#5C564E] hover:text-[#15130F] hover:bg-white/60'
+                    }`}
+                  >
+                    <Icon className="w-3 h-3" />
+                    <span>{step.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Step Color-Block Header Panel */}
+            <div
+              className={`${currentStepData.panelBg} p-6 rounded-3xl transition-colors duration-300 shadow-xs`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] uppercase font-mono tracking-wider opacity-80">
+                  {currentStepData.badge}
+                </span>
+                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                  ✦
+                </span>
+              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight">
+                {currentStepData.title}
+              </h2>
+              <p className="text-xs opacity-85 mt-1 font-sans leading-relaxed">
+                {currentStepData.subtitle}
+              </p>
+            </div>
+
+            {/* Active Section Form Box (Clean Cream Card) */}
+            <div className="bg-[#FAF8F3] p-6 rounded-3xl border border-[#15130F]/10 shadow-xs">
+              {renderActiveStepComponent()}
+
+              {/* Step Wizard Footer (Prev / Next Buttons) */}
+              <div className="flex items-center justify-between pt-6 mt-6 border-t border-[#15130F]/10">
+                <button
+                  type="button"
+                  disabled={activeStep === 0}
+                  onClick={() => setActiveStep(activeStep - 1)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium text-[#15130F] bg-white border border-[#15130F]/15 hover:bg-[#EFECE3] disabled:opacity-30 transition"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span>Previous</span>
+                </button>
+
+                <span className="text-xs text-[#5C564E] font-mono">
+                  {activeStep + 1} / {steps.length}
+                </span>
+
+                <button
+                  type="button"
+                  disabled={activeStep === steps.length - 1}
+                  onClick={() => setActiveStep(activeStep + 1)}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-semibold text-[#F7F4ED] bg-[#15130F] hover:bg-[#2A1F18] shadow-sm disabled:opacity-30 transition"
+                >
+                  <span>Next step</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Live ATS Preview Pane (7 cols on lg) */}
+          <div className="lg:col-span-7 h-[calc(100vh-140px)] min-h-[620px] sticky top-24">
+            <LivePreviewPane />
+          </div>
         </div>
       </div>
     </div>

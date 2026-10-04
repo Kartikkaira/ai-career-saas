@@ -42,7 +42,7 @@ export const AnalyzerPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [resumeText, setResumeText] = useState('');
   const [jobDescription, setJobDescription] = useState('');
-  const [targetRole, setTargetRole] = useState('Senior Full Stack Developer');
+  const [targetRole, setTargetRole] = useState('Senior Product Manager');
   const [inputMode, setInputMode] = useState('pdf'); // 'pdf' | 'text'
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const AnalyzerPage = () => {
     });
 
     if (res.success) {
-      addToast('✨ ATS Analysis Complete!', 'success');
+      addToast('✨ ATS analysis complete!', 'success');
       if (res.analysis?._id) {
         navigate(`/analyzer?id=${res.analysis._id}`, { replace: true });
       }
@@ -105,204 +105,259 @@ export const AnalyzerPage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-200">
-      {/* Page Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
-            <FileSearch className="w-8 h-8 text-[#4f46e5]" />
-            Resume Analyzer & ATS Score Suite
+    <div className="bg-[#F7F4ED] text-[#15130F] min-h-screen pt-28 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        {/* Page Header */}
+        <div className="max-w-3xl">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EFECE3] text-[#15130F] border border-[#15130F]/10 mb-4">
+            ✦ ATS Intelligence Scanner
+          </span>
+          <h1 className="font-serif text-4xl sm:text-6xl font-normal leading-[1.08] tracking-tight text-[#15130F]">
+            Know your score <br />
+            <span className="italic font-light">before recruiters do.</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Evaluate keyword match rates, formatting parseability, and bullet point metrics with Gemini AI.
+          <p className="mt-4 text-base text-[#5C564E] leading-relaxed max-w-2xl font-sans">
+            Benchmark your résumé against modern applicant tracking systems and target job
+            descriptions. Instant keyword gap detection and bullet improvements.
           </p>
         </div>
 
-        {currentAnalysis && (
-          <button
-            type="button"
-            onClick={handleResetScan}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-950 bg-white border border-slate-200 shadow-xs transition self-start sm:self-auto"
+        {/* Scan Input or Results View */}
+        {!currentAnalysis ? (
+          /* Form Upload Wizard */
+          <form
+            onSubmit={handleAnalyze}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Scan Another Resume</span>
-          </button>
-        )}
-      </div>
+            {/* Left: Document Upload Area (7 cols on lg) */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="bg-[#FAF8F3] border border-[#15130F]/15 rounded-3xl p-6 sm:p-8 shadow-xs">
+                {/* Mode Selector Pills */}
+                <div className="flex items-center justify-between pb-4 border-b border-[#15130F]/10 mb-6">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setInputMode('pdf')}
+                      className={`px-4 py-2 rounded-full text-xs font-medium transition ${
+                        inputMode === 'pdf'
+                          ? 'bg-[#15130F] text-[#F7F4ED]'
+                          : 'bg-white text-[#5C564E] hover:text-[#15130F] border border-[#15130F]/10'
+                      }`}
+                    >
+                      Upload PDF
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setInputMode('text')}
+                      className={`px-4 py-2 rounded-full text-xs font-medium transition ${
+                        inputMode === 'text'
+                          ? 'bg-[#15130F] text-[#F7F4ED]'
+                          : 'bg-white text-[#5C564E] hover:text-[#15130F] border border-[#15130F]/10'
+                      }`}
+                    >
+                      Paste plain text
+                    </button>
+                  </div>
 
-      {/* If No Analysis Result Yet: Show Upload Form */}
-      {!currentAnalysis ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Upload Zone (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
-            {/* Input Mode Switcher */}
-            <div className="flex items-center gap-2 p-1.5 bg-slate-100 border border-slate-200 rounded-2xl">
-              <button
-                type="button"
-                onClick={() => setInputMode('pdf')}
-                className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  inputMode === 'pdf'
-                    ? 'bg-[#7B61FF] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Upload PDF Resume
-              </button>
-              <button
-                type="button"
-                onClick={() => setInputMode('text')}
-                className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  inputMode === 'text'
-                    ? 'bg-[#7B61FF] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Paste Resume Text
-              </button>
-            </div>
-
-            {/* Mode 1: PDF Drop Zone */}
-            {inputMode === 'pdf' ? (
-              <div
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleFileDrop}
-                className="relative p-8 sm:p-12 rounded-3xl border-2 border-dashed border-slate-200 hover:border-[#7B61FF] bg-white hover:bg-[#F3F0FF]/30 transition-all text-center space-y-4 cursor-pointer group shadow-card hover:shadow-card-hover card-interactive"
-              >
-                <input
-                  type="file"
-                  accept="application/pdf,.pdf"
-                  onChange={handleFileDrop}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-
-                <div className="w-16 h-16 rounded-2xl bg-[#F3F0FF] text-[#7B61FF] border border-[#d7cffe] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform shadow-xs">
-                  <UploadCloud className="w-8 h-8" />
+                  <span className="text-[11px] text-[#5C564E] font-mono">
+                    Max 10MB · 100% private
+                  </span>
                 </div>
 
-                <div className="space-y-1">
-                  <h4 className="text-base font-bold text-slate-900">
-                    {selectedFile ? selectedFile.name : 'Drag & drop your PDF resume here'}
-                  </h4>
-                  <p className="text-xs text-slate-500">
-                    Supports standard PDF exports from Word, Docs, Canva, or LaTeX (max 5MB)
+                {inputMode === 'pdf' ? (
+                  /* PDF Drag Drop Zone */
+                  <div
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleFileDrop}
+                    className="border-2 border-dashed border-[#15130F]/20 hover:border-[#15130F]/50 rounded-2xl p-8 sm:p-12 text-center bg-white transition cursor-pointer flex flex-col items-center justify-center relative"
+                  >
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileDrop}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                    <div className="w-12 h-12 rounded-full bg-[#EFECE3] flex items-center justify-center text-[#15130F] mb-4">
+                      <UploadCloud className="w-6 h-6" />
+                    </div>
+                    {selectedFile ? (
+                      <div className="space-y-1">
+                        <p className="text-sm font-semibold text-[#15130F]">
+                          {selectedFile.name}
+                        </p>
+                        <p className="text-xs text-[#5C564E]">
+                          {(selectedFile.size / 1024).toFixed(1)} KB · Ready for analysis
+                        </p>
+                        <span className="inline-block mt-2 text-xs font-medium text-[#B8571E] underline">
+                          Click to replace file
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        <p className="text-sm font-semibold text-[#15130F]">
+                          Drop your résumé PDF here
+                        </p>
+                        <p className="text-xs text-[#5C564E]">
+                          or browse from your computer
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  /* Plain Text Textarea */
+                  <div>
+                    <label className="block text-xs font-medium text-[#15130F] mb-2">
+                      Paste résumé content
+                    </label>
+                    <textarea
+                      rows={10}
+                      value={resumeText}
+                      onChange={(e) => setResumeText(e.target.value)}
+                      placeholder="Paste your full resume text here (Summary, Work History, Education, Skills)..."
+                      className="w-full p-4 rounded-2xl bg-white border border-[#15130F]/15 text-xs text-[#15130F] focus:outline-none focus:border-[#15130F] font-mono leading-relaxed"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right: Target Job & Role (5 cols on lg) */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className="bg-[#FAF8F3] border border-[#15130F]/15 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+                <div>
+                  <label className="block text-xs font-medium text-[#15130F] mb-1.5">
+                    Target job title
+                  </label>
+                  <input
+                    type="text"
+                    value={targetRole}
+                    onChange={(e) => setTargetRole(e.target.value)}
+                    placeholder="e.g. Senior Product Manager"
+                    className="w-full px-4 py-2.5 rounded-full bg-white border border-[#15130F]/15 text-xs text-[#15130F] focus:outline-none focus:border-[#15130F]"
+                  />
+                  <p className="text-[11px] text-[#5C564E] mt-1">
+                    Used to benchmark relevant seniority keywords.
                   </p>
                 </div>
-              </div>
-            ) : (
-              /* Mode 2: Textarea */
-              <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-card space-y-3">
-                <label className="block text-xs font-bold text-slate-700">Paste Full Resume Text</label>
-                <textarea
-                  rows={14}
-                  value={resumeText}
-                  onChange={(e) => setResumeText(e.target.value)}
-                  placeholder="Paste your current resume content here..."
-                  className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-xs leading-relaxed focus:border-[#7B61FF] focus:bg-white focus:outline-none transition"
-                />
-              </div>
-            )}
 
-            {/* Target Role Field */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                Target Role / Domain (Optional but recommended):
-              </label>
-              <div className="relative">
-                <Briefcase className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={targetRole}
-                  onChange={(e) => setTargetRole(e.target.value)}
-                  placeholder="e.g. Senior Full Stack Engineer / Product Manager"
-                  className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs sm:text-sm focus:border-indigo-600 focus:outline-none shadow-sm"
-                />
-              </div>
-            </div>
-          </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#15130F] mb-1.5">
+                    Target job description (optional but recommended)
+                  </label>
+                  <textarea
+                    rows={6}
+                    value={jobDescription}
+                    onChange={(e) => setJobDescription(e.target.value)}
+                    placeholder="Paste the job description or requirements to run custom keyword matching and semantic alignment..."
+                    className="w-full p-3.5 rounded-2xl bg-white border border-[#15130F]/15 text-xs text-[#15130F] focus:outline-none focus:border-[#15130F] leading-relaxed"
+                  />
+                </div>
 
-          {/* Right Column: Optional Target Job Description & Scan Action (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-card hover:shadow-card-hover card-interactive space-y-4">
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#7B61FF]" />
-                  Target Job Description (Optional)
-                </h4>
-                <p className="text-[11px] text-slate-500 mt-1">
-                  Paste the job posting to calculate an exact keyword match percentage and uncover missing competencies.
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isAnalyzing}
+                    className="w-full py-3.5 px-6 rounded-full bg-[#15130F] text-[#F7F4ED] hover:bg-[#2A1F18] font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 active:scale-98"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Analyzing with Gemini AI...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Scan & score résumé</span>
+                        <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                          →
+                        </span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Informational Callout */}
+              <div className="bg-[#EFECE3] border border-[#15130F]/10 rounded-2xl p-4 text-xs text-[#5C564E] space-y-1">
+                <p className="font-semibold text-[#15130F] flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#3D4A2E]" />
+                  What we scan for
+                </p>
+                <p>
+                  • Format compatibility with Workday, Greenhouse & Taleo <br />
+                  • Exact vs. semantic keyword matching <br />
+                  • Quantifiable metric density (percentages, revenue, team scale) <br />
+                  • Repetitive passive verbs vs. executive action verbs
                 </p>
               </div>
+            </div>
+          </form>
+        ) : (
+          /* Results Dashboard */
+          <div className="space-y-8 animate-in fade-in duration-300">
+            {/* Top Toolbar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#15130F]/10">
+              <div>
+                <span className="text-xs font-mono text-[#5C564E]">
+                  Report ID: {currentAnalysis._id || 'SCAN-ACTIVE'}
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl text-[#15130F] font-normal">
+                  Diagnostic analysis results
+                </h2>
+              </div>
 
-              <textarea
-                rows={7}
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
-                placeholder="Paste requirements, responsibilities, or minimum qualifications from LinkedIn/Indeed posting..."
-                className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs leading-relaxed focus:border-[#7B61FF] focus:bg-white focus:outline-none transition"
-              />
-
-              <button
-                type="button"
-                disabled={isAnalyzing}
-                onClick={handleAnalyze}
-                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl font-bold text-white bg-[#7B61FF] hover:bg-[#6B4FE0] shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 transition-all duration-200 cursor-pointer"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Gemini AI Analyzing Resume...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Run Deep ATS Analysis</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleResetScan}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium bg-white border border-[#15130F]/15 text-[#15130F] hover:bg-[#FAF8F3] transition"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Scan new résumé</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/builder')}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-semibold bg-[#15130F] text-[#F7F4ED] hover:bg-[#2A1F18] transition"
+                >
+                  <span>Open builder</span>
+                  <span>→</span>
+                </button>
+              </div>
             </div>
 
-            {/* Feature Highlights */}
-            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 space-y-2 text-xs text-slate-600 shadow-xs">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Extracts text safely with zero data sharing.</span>
+            {/* Score Display reusing the hero mini-card pattern */}
+            <AtsScoreGauge
+              score={currentAnalysis.overallScore || 0}
+              executiveSummary={currentAnalysis.executiveSummary}
+              roleName={currentAnalysis.targetRole || targetRole}
+            />
+
+            {/* Detailed Cards Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Keywords Card (7 cols) */}
+              <div className="lg:col-span-7 space-y-6">
+                <KeywordsCard
+                  foundKeywords={currentAnalysis.foundKeywords || []}
+                  missingKeywords={currentAnalysis.missingKeywords || []}
+                  matchRate={currentAnalysis.keywordMatchRate || 0}
+                />
+                <SuggestionsCard suggestions={currentAnalysis.suggestions || []} />
               </div>
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-[#7B61FF] shrink-0" />
-                <span>Evaluates formatting, keywords, and X-Y-Z metrics.</span>
+
+              {/* Radar & Grammar Breakdown (5 cols) */}
+              <div className="lg:col-span-5 space-y-6">
+                <ScoreRadar
+                  formatting={currentAnalysis.formattingScore || 0}
+                  skillsMatch={currentAnalysis.skillsMatchScore || 0}
+                  impact={currentAnalysis.impactScore || 0}
+                  brevity={currentAnalysis.brevityScore || 0}
+                />
+                <GrammarCard issues={currentAnalysis.grammarIssues || []} />
               </div>
             </div>
           </div>
-        </div>
-      ) : (
-        /* Results View */
-        <div className="space-y-8 animate-in fade-in zoom-in-95 duration-300">
-          {/* 1. Score Gauge & Executive Summary */}
-          <AtsScoreGauge
-            score={currentAnalysis.overallAtsScore}
-            executiveSummary={currentAnalysis.executiveSummary}
-          />
-
-          {/* 2. 6-Dimension Radar Breakdown */}
-          <ScoreRadar breakdown={currentAnalysis.scoreBreakdown} />
-
-          {/* 3. Keyword Coverage Card */}
-          <KeywordsCard
-            matchedKeywords={currentAnalysis.matchedKeywords}
-            missingKeywords={currentAnalysis.missingKeywords}
-          />
-
-          {/* 4. Actionable Suggestions & Risks */}
-          <SuggestionsCard
-            suggestions={currentAnalysis.actionableSuggestions}
-            strengths={currentAnalysis.strengths}
-            criticalIssues={currentAnalysis.criticalIssues}
-          />
-
-          {/* 5. Grammar & Clarity Issues */}
-          <GrammarCard grammarAndClarity={currentAnalysis.grammarAndClarity} />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

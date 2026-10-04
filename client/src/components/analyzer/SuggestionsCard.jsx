@@ -1,6 +1,5 @@
 import React from 'react';
 import { Lightbulb, Check, AlertTriangle } from 'lucide-react';
-import { Badge } from '../common/Badge';
 
 export const SuggestionsCard = ({ suggestions = [], strengths = [], criticalIssues = [] }) => {
   return (
@@ -9,15 +8,15 @@ export const SuggestionsCard = ({ suggestions = [], strengths = [], criticalIssu
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Critical Issues */}
         {criticalIssues.length > 0 && (
-          <div className="p-5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-3 shadow-xs">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-rose-800 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              Critical ATS Rejection Risks
+          <div className="p-5 rounded-2xl bg-[#FAF8F3] border border-[#B8571E]/30 space-y-3 shadow-xs">
+            <h5 className="text-xs font-semibold text-[#B8571E] flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-[#B8571E]" />
+              <span className="font-serif text-sm">Critical ATS rejection risks</span>
             </h5>
-            <ul className="space-y-2 text-xs text-rose-900">
+            <ul className="space-y-2 text-xs text-[#5C564E]">
               {criticalIssues.map((issue, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="text-rose-600 font-bold">•</span>
+                  <span className="text-[#B8571E] font-bold">•</span>
                   <span>{issue}</span>
                 </li>
               ))}
@@ -27,15 +26,15 @@ export const SuggestionsCard = ({ suggestions = [], strengths = [], criticalIssu
 
         {/* Strengths */}
         {strengths.length > 0 && (
-          <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-3 shadow-xs">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-600" />
-              Identified Strengths
+          <div className="p-5 rounded-2xl bg-[#FAF8F3] border border-[#3D4A2E]/30 space-y-3 shadow-xs">
+            <h5 className="text-xs font-semibold text-[#3D4A2E] flex items-center gap-2">
+              <Check className="w-4 h-4 text-[#3D4A2E]" />
+              <span className="font-serif text-sm">Identified strengths</span>
             </h5>
-            <ul className="space-y-2 text-xs text-emerald-900">
+            <ul className="space-y-2 text-xs text-[#5C564E]">
               {strengths.map((str, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="text-emerald-600 font-bold">•</span>
+                  <span className="text-[#3D4A2E] font-bold">•</span>
                   <span>{str}</span>
                 </li>
               ))}
@@ -45,50 +44,35 @@ export const SuggestionsCard = ({ suggestions = [], strengths = [], criticalIssu
       </div>
 
       {/* Actionable Suggestions */}
-      <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(79,70,229,0.06)] space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-            <Lightbulb className="w-4 h-4 text-[#4f46e5]" />
-            Actionable Recommendations ({suggestions.length})
+      <div className="bg-[#FAF8F3] p-6 rounded-3xl border border-[#15130F]/10 shadow-xs space-y-4 text-[#15130F]">
+        <div className="flex items-center justify-between border-b border-[#15130F]/10 pb-3">
+          <h4 className="font-serif text-xl sm:text-2xl font-normal text-[#15130F] flex items-center gap-2">
+            <span>Actionable recommendations ({suggestions.length})</span>
           </h4>
-          <span className="text-xs text-slate-400">Step-by-step Score Multipliers</span>
+          <span className="text-xs text-[#5C564E]">Step-by-step score multipliers</span>
         </div>
 
         {suggestions.length === 0 ? (
-          <p className="text-xs text-slate-500">No specific suggestions generated.</p>
+          <p className="text-xs text-[#5C564E]">No specific suggestions generated.</p>
         ) : (
-          <div className="space-y-4">
-            {suggestions.map((item, idx) => {
-              const priorityVariant =
-                item.priority === 'high' ? 'danger' : item.priority === 'medium' ? 'warning' : 'primary';
-
+          <div className="space-y-3">
+            {suggestions.map((sug, idx) => {
+              const text = typeof sug === 'string' ? sug : sug.text || sug.message;
+              const section = typeof sug === 'object' && sug.section ? sug.section : 'General';
               return (
                 <div
                   key={idx}
-                  className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 hover:border-indigo-200 transition"
+                  className="p-3.5 rounded-2xl bg-white border border-[#15130F]/10 flex items-start gap-3"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#4f46e5]"></span>
-                      Section: {item.section || 'General'}
+                  <span className="w-6 h-6 rounded-full bg-[#EFECE3] text-[#15130F] flex items-center justify-center text-xs font-serif shrink-0 mt-0.5">
+                    {idx + 1}
+                  </span>
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-mono text-[#8A8277] uppercase tracking-wider">
+                      {section}
                     </span>
-                    <Badge variant={priorityVariant} size="sm">
-                      {item.priority?.toUpperCase() || 'MEDIUM'} PRIORITY
-                    </Badge>
+                    <p className="text-xs text-[#15130F] leading-relaxed">{text}</p>
                   </div>
-
-                  <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
-                    {item.suggestion}
-                  </p>
-
-                  {item.exampleFix && (
-                    <div className="p-3 bg-white rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1 shadow-xs">
-                      <span className="text-[10px] font-mono font-bold text-[#4f46e5] uppercase tracking-wider block">
-                        Example Rewrite:
-                      </span>
-                      <p className="font-sans italic text-slate-700">{item.exampleFix}</p>
-                    </div>
-                  )}
                 </div>
               );
             })}
